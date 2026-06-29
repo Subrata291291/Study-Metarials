@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- API stands for Application Programming Interface.
+
+    In simple words:
+    An API is a way for one piece of software (like your JavaScript code) to communicate with another system (like a server, database, or third-party service). -->
+
+    <!-- In JavaScript, you use APIs to:
+
+    Get data from a server
+
+    Send data to a database
+
+    Use third-party services (like Google Maps, Weather, YouTube, etc.)
+
+    Most of the time, this happens using HTTP requests — usually through functions like:
+
+    fetch()
+
+    axios (library)
+
+    XMLHttpRequest (old way) -->
+
+    <!-- fetch("https://api.open-meteo.com/v1/forecast?latitude=28.61&longitude=77.23&current_weather=true")
+  .then(response => response.json())
+  .then(data => {
+    console.log("Current weather:", data.current_weather);
+  })
+  .catch(error => console.error("Error:", error)); -->
+
+  <!-- Output (example):
+
+    {
+    "temperature": 29.5,
+    "windspeed": 8.2,
+    "weathercode": 3
+    } -->
+
+
+    <!-- Example: Sending Data to an API
+
+    You can also send data (like a form submission):
+
+    fetch("https://example.com/api/contact", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        name: "Subrata",
+        email: "subrata@example.com",
+        message: "Hello!"
+    })
+    })
+    .then(res => res.json())
+    .then(data => console.log("Server response:", data))
+    .catch(err => console.error(err)); -->
+    </body>
+</html>

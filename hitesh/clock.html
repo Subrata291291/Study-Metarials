@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="center">
+        <div id="banner">
+            <span>Your current time</span>
+        </div>
+        <div id="clock"></div>
+    </div>
+
+    <script>
+        const clock = document.getElementById("clock")
+        // const clock = document.querySelector("#clock")
+
+        //let date = new Date()
+        //console.log(date.toLocaleTimeString());
+        
+        setInterval(function(){
+            let date = new Date(); // create new date each second
+            clock.innerHTML = date.toLocaleTimeString(); // update clock
+        }, 1000)
+    </script>
+</body>
+</html>

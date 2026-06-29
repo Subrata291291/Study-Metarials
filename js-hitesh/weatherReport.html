@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Weather Pro</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body {
+    font-family: Arial;
+    background: #f1f3f4;
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+}
+
+.card {
+    width: 750px;
+    background: #fff;
+    border-radius: 20px;
+    padding: 25px;
+}
+
+.temp {
+    font-size: 60px;
+    font-weight: bold;
+}
+
+.forecast {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
+.day {
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.day.active {
+    background: #fce8d5;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <h3 id="city">Bardhaman, India</h3>
+    <div class="temp" id="temp"></div>
+    <p id="desc"></p>
+
+    <div class="forecast" id="forecast"></div>
+
+    <canvas id="chart"></canvas>
+</div>
+
+<script>
+let weatherData = null;
+let chartInstance = null;
+
+async function getWeather() {
+    const res = await fetch(
+        `https://api.openweathermap.org/data/2.5/forecast?q=Bardhaman&appid=8b76707db55bdcd57152b549265768bc&units=metric`
+    );
+
+    weatherData = await res.json();
+
+    renderDays();
+    updateUI(0); // default today
+}
+
+// ICON
+function getIcon(main) {
+    if(main === "Clear") return "☀️";
+    if(main === "Clouds") return "☁️";
+    if(main === "Rain") return "🌧️";
+    return "🌤️";
+}
+
+// RENDER DAYS
+function renderDays() {
+    const container = document.getElementById("forecast");
+    container.innerHTML = "";
+
+    const daily = weatherData.list.filter(i => i.dt_txt.includes("12:00:00"));
+
+    daily.slice(0,7).forEach((day, index) => {
+        const div = document.createElement("div");
+        div.className = "day";
+        if(index === 0) div.classList.add("active");
+
+        const date = new Date(day.dt_txt);
+
+        div.innerHTML = `
+            <p>${date.toLocaleDateString('en-US', { weekday: 'short' })}</p>
+            <p>${getIcon(day.weather[0].main)}</p>
+            <p>${Math.round(day.main.temp)}°</p>
+        `;
+
+        div.onclick = () => {
+            document.querySelectorAll(".day").forEach(d => d.classList.remove("active"));
+            div.classList.add("active");
+
+            updateUI(index);
+        };
+
+        container.appendChild(div);
+    });
+}
+
+// UPDATE UI WHEN CLICK
+function updateUI(dayIndex) {
+    const list = weatherData.list;
+
+    const start = dayIndex * 8; // 8 data per day
+    const selected = list.slice(start, start + 8);
+
+    // Current info
+    document.getElementById("temp").innerText = Math.round(selected[0].main.temp) + "°C";
+    document.getElementById("desc").innerText = selected[0].weather[0].description;
+
+    // Graph
+    const temps = selected.map(i => i.main.temp);
+    const labels = selected.map(i => {
+        let h = new Date(i.dt_txt).getHours();
+        return h + ":00";
+    });
+
+    if(chartInstance) chartInstance.destroy();
+
+    chartInstance = new Chart(document.getElementById("chart"), {
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: [{
+                data: temps,
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            scales: { y: { display: false } }
+        }
+    });
+}
+
+// AUTO LOAD
+getWeather();
+</script>
+
+</body>
+</html>

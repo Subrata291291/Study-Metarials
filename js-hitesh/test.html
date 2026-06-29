@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // Destructuring
+        const names = {
+            name: "Subrata",
+            age: 34
+        }
+        console.log(names);
+
+        const {name, age} = names
+
+        console.log(name)
+
+        const newNames = {
+            ...names,
+            location: "kokata"
+        }
+        console.log(newNames);
+        
+        
+    </script>
+</body>
+</html>

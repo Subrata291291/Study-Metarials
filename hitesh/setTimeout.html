@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Hello World</h1>
+    <button type="button" id="stop">Stop</button>
+    <script>
+        // setTimeout(function(){
+        //     console.log("Subrata");
+            
+        // },5000)
+
+
+        // const myName = function() {
+        //     console.log("Subrata");
+        // }
+        // setTimeout(myName, 5000)
+
+        const textChanged = function() {
+            document.querySelector("h1").innerHTML = "text changed"
+        }
+        //setTimeout(textChanged ,10000)
+
+        const stopMethod = setTimeout(textChanged, 5000)
+
+         document.getElementById("stop").addEventListener('click', function() {
+            clearTimeout(stopMethod);
+            console.log("Stopped");
+        });
+    </script>
+</body>
+</html>

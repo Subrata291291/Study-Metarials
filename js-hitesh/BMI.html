@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects</title>
+</head>
+<body>
+    <!--Body color change using button-->
+    <section class="buttons" style="position: fixed; right: 2rem; top: 50%; transform: translate(0%,-50%); display: flex; flex-direction: column;">
+        <button class="button" id="grey" style="background-color: grey; padding: 1.5rem 2rem; cursor: pointer;"></button>
+        <button class="button" id="red" style="background-color: red; padding: 1.5rem 2rem; cursor: pointer;"></button>
+        <button class="button" id="yellow" style="background-color: yellow; padding: 1.5rem 2rem; cursor: pointer;"></button>
+        <button class="button" id="black" style="background-color: black; padding: 1.5rem 2rem; cursor: pointer;"></button>
+        <button class="button" id="white" style="background-color: white; padding: 1.5rem 2rem; cursor: pointer;"></button>
+    </section>
+    <!--Body color change using button-->
+
+    <!--BMI Calculator-->
+    <h1 style="text-align: center; text-transform: uppercase;">BMI Calculator</h1>
+    <form id="bmi-form" style="text-align: center; padding: 2rem; background-color: #ccc; max-width: 400px; margin: 0 auto; border-radius: 10px;">
+        <label>Height in CM</label>
+        <input type="phone" id="height" style="outline: none;"></input><br><br>
+        <label>Weight in KG</label>
+        <input type="phone" id="weight" style="outline: none;"></input><br><br>
+        <div id="result" style="color: red; font-size: 1.6rem;"></div>
+        <button type="submit">Calculate</button>
+
+        <h3>BMI Weigh Guide</h3>
+        <p>Under Weight (KG): <strong>Less Than - 50 KG</strong></p>
+        <p>Normal Range (KG): <strong>50 KG - 79 KG</strong></p>
+        <p>Over Weight (KG): <strong>More Than - 80 KG</strong></p>
+    </form>
+    <!--BMI Calculator-->
+</body>
+<!--Body color change using button-->
+<script>
+    const buttons = document.querySelectorAll("button")
+    const body = document.querySelector("body")
+
+    buttons.forEach(function(button) {
+        button.addEventListener('click' ,function(e) {
+            //console.log(e.target);
+            if (e.target.id === 'grey') {
+                body.style.backgroundColor = e.target.id
+                body.style.color = "white"
+            } else if (e.target.id === 'red') {
+                body.style.backgroundColor = e.target.id
+            } else if (e.target.id === 'yellow') {
+                body.style.backgroundColor = e.target.id
+                body.style.color = "black"
+            } else if (e.target.id === 'black') {
+                body.style.backgroundColor = e.target.id
+                body.style.color = "white"
+            } else if (e.target.id === 'white') {
+                body.style.backgroundColor = e.target.id
+                body.style.color = "black"
+            } else (
+                body.style.backgroundColor = "white"
+            )
+        })
+    })
+</script>
+<!--Body color change using button-->
+
+<!--BMI Calculator-->
+<script>
+    const bmiForm = document.getElementById("bmi-form");
+    //this usecae will give you empty value, so alway use thi under addEventListener 
+    // const height = parseInt(document.getElementById("height").value) 
+    // const weight = parseInt(document.getElementById("weight").value)
+
+    bmiForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const height = parseFloat(document.getElementById("height").value);
+    const weight = parseFloat(document.getElementById("weight").value);
+    const result = document.getElementById("result");
+
+    // Validation
+    if (isNaN(height) || height <= 0) {
+        result.innerHTML = "⚠️ Please enter a valid height (in cm).";
+        result.style.color = "red";
+        return;
+    } else if (isNaN(weight) || weight <= 0) {
+        result.innerHTML = "⚠️ Please enter a valid weight (in kg).";
+        result.style.color = "red";
+        return;
+    }
+
+    // BMI Calculation
+    const bmi = (weight / ((height / 100) ** 2)).toFixed(2);
+    let message = "";
+    let color = "";
+
+    // Classification based on WHO
+    if (bmi < 16) {
+        message = "Severely Underweight 😟";
+        color = "#d9534f"; // red
+    } else if (bmi >= 16 && bmi <= 16.9) {
+        message = "Moderately Underweight 😕";
+        color = "#f0ad4e"; // orange
+    } else if (bmi >= 17 && bmi <= 18.4) {
+        message = "Mildly Underweight 😐";
+        color = "#f0ad4e"; // orange
+    } else if (bmi >= 18.5 && bmi <= 24.9) {
+        message = "✅ Normal / Healthy Weight 😊";
+        color = "#5cb85c"; // green
+    } else if (bmi >= 25 && bmi <= 29.9) {
+        message = "Overweight ⚠️";
+        color = "#f0ad4e"; // orange
+    } else if (bmi >= 30 && bmi <= 34.9) {
+        message = "Obese (Class I) 😟";
+        color = "#d9534f"; // red
+    } else if (bmi >= 35 && bmi <= 39.9) {
+        message = "Obese (Class II) 😢";
+        color = "#c9302c"; // dark red
+    } else {
+        message = "You’re just below the “Overweight” threshold — maintaining current weight or slight reduction would keep you in the healthy zone.🚨";
+        color = "#b52b2b"; // deep red
+    }
+
+    // Output
+    result.innerHTML = `Your BMI is <b>${bmi}</b><br>${message}`;
+    result.style.color = color;
+    });
+</script>
+<!--BMI Calculator-->
+</html>

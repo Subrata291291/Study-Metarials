@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="main-box" style="text-align: center;">
+        <h1>Hello Javascript</h1>
+        <button type="button" id="start">Start</button>
+        <button type="button" id="stop">Stop</button>
+    </div>
+    <!-- <script>
+        setInterval(function() {
+            // console.log("Subata");
+            document.querySelector("h1").innerHTML = "text changed"
+            console.log("changed" , Date.now());
+            
+        },5000)
+    </script> -->
+    <script>
+        // document.getElementById("start").addEventListener('click', function(e){
+        //     const body = document.querySelector("body")
+        //     body.style.backgroundColor = "red"
+        // }, 5000)
+
+        const randomColor = function() {
+            const hexColor = "0123456789ABCDEF"
+            let color = "#"
+            for (let index = 0; index < 6; index++) {
+               color += hexColor[(Math.floor(Math.random() * 16))]
+            }
+            return color;
+        }
+        //console.log(randomColor());
+        //console.log(Math.floor(Math.random() * 16));
+
+        let colorInterval;
+
+        document.getElementById("start").addEventListener('click', function() {
+            if(!colorInterval){
+                colorInterval = setInterval(function() {
+                const newColor = randomColor();
+                document.body.style.backgroundColor = newColor;
+                console.log("Background changed to:", newColor);
+            }, 1000);
+            }
+        });
+
+        document.getElementById("stop").addEventListener('click', function() {
+            clearInterval(colorInterval);
+            colorInterval = null;
+            console.log("Color changing stopped");
+        });
+    </script>
+</body>
+</html>

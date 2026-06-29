@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Terracotta Wellness | The Modern Apothecary</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@700;800&amp;family=Manrope:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "surface": "#fcf9f4",
+                "on-tertiary-fixed": "#3d0600",
+                "secondary-fixed-dim": "#c9c6c2",
+                "primary-fixed": "#ffdad4",
+                "on-tertiary-container": "#ffbcad",
+                "secondary-fixed": "#e6e2de",
+                "on-error": "#ffffff",
+                "on-primary": "#ffffff",
+                "outline": "#88726e",
+                "surface-bright": "#fcf9f4",
+                "secondary": "#605e5b",
+                "secondary-container": "#e6e2de",
+                "on-tertiary": "#ffffff",
+                "error": "#ba1a1a",
+                "inverse-surface": "#31302d",
+                "on-secondary-fixed": "#1c1c19",
+                "surface-container-high": "#ebe8e3",
+                "on-secondary": "#ffffff",
+                "on-primary-container": "#ffbcb0",
+                "surface-container-lowest": "#ffffff",
+                "surface-container-highest": "#e5e2dd",
+                "primary": "#6f281c",
+                "on-secondary-container": "#666461",
+                "error-container": "#ffdad6",
+                "background": "#fcf9f4",
+                "on-background": "#1c1c19",
+                "on-primary-fixed-variant": "#792f23",
+                "surface-variant": "#e5e2dd",
+                "tertiary-fixed-dim": "#ffb4a4",
+                "primary-fixed-dim": "#ffb4a7",
+                "surface-tint": "#974638",
+                "surface-container-low": "#f6f3ee",
+                "on-tertiary-fixed-variant": "#783020",
+                "tertiary-container": "#8c3f2e",
+                "tertiary": "#6e2919",
+                "surface-dim": "#dcdad5",
+                "on-error-container": "#93000a",
+                "outline-variant": "#dac1bc",
+                "on-surface": "#1c1c19",
+                "surface-container": "#f0ede9",
+                "inverse-primary": "#ffb4a7",
+                "on-secondary-fixed-variant": "#484744",
+                "primary-container": "#8d3e31",
+                "on-primary-fixed": "#3e0401",
+                "on-surface-variant": "#55433f",
+                "tertiary-fixed": "#ffdad3",
+                "inverse-on-surface": "#f3f0eb"
+              },
+              fontFamily: {
+                "headline": ["Epilogue", "sans-serif"],
+                "body": ["Manrope", "sans-serif"],
+                "label": ["Manrope", "sans-serif"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Manrope', sans-serif; background-color: #fcf9f4; color: #1c1c19; }
+        h1, h2, h3 { font-family: 'Epilogue', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- TopNavBar -->
+<nav class="bg-[#fcf9f4] dark:bg-stone-950 docked full-width top-0 z-50 no-line tonal-shift bg-[#f6f3ee] dark:bg-stone-900 sticky">
+<div class="flex justify-between items-center w-full px-8 py-6 max-w-7xl mx-auto">
+<div class="text-2xl font-bold tracking-tight text-[#6f281c] dark:text-[#8d3e31]">Terracotta Wellness</div>
+<div class="hidden md:flex items-center gap-12">
+<a class="text-[#6f281c] dark:text-[#8d3e31] border-b-2 border-[#6f281c] pb-1 font-bold transition-colors duration-200" href="#">Home</a>
+<a class="text-stone-600 dark:text-stone-400 font-medium hover:text-[#8d3e31] dark:hover:text-[#6f281c] transition-colors duration-200" href="#">Remedies</a>
+<a class="text-stone-600 dark:text-stone-400 font-medium hover:text-[#8d3e31] dark:hover:text-[#6f281c] transition-colors duration-200" href="#">About</a>
+<a class="text-stone-600 dark:text-stone-400 font-medium hover:text-[#8d3e31] dark:hover:text-[#6f281c] transition-colors duration-200" href="#">Book</a>
+</div>
+<div class="flex items-center gap-6">
+<button class="material-symbols-outlined text-stone-600">account_circle</button>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-full font-bold hover:opacity-90 transition-all active:scale-95">Get Started</button>
+</div>
+</div>
+</nav>
+<!-- Hero Section -->
+<section class="relative min-h-[870px] flex items-center pt-20 overflow-hidden">
+<div class="max-w-7xl mx-auto px-8 w-full grid md:grid-cols-12 gap-12 items-center">
+<div class="md:col-span-7 z-10">
+<span class="text-tertiary font-bold tracking-widest uppercase text-sm mb-4 block">A New Standard of Care</span>
+<h1 class="text-7xl font-extrabold text-on-surface leading-[1.1] mb-8">Clinical care, curated for you.</h1>
+<p class="text-xl text-on-surface-variant max-w-lg mb-10 leading-relaxed">
+                    Where editorial sophistication meets pharmaceutical precision. We've redesigned the medical journey to be as elegant as it is effective.
+                </p>
+<div class="flex items-center gap-6">
+<button class="bg-primary text-on-primary px-10 py-5 rounded-full font-bold text-lg shadow-lg shadow-primary/10 hover:shadow-primary/20 transition-all active:scale-95">START CONSULTATION</button>
+<button class="flex items-center gap-2 text-primary font-bold hover:translate-x-1 transition-transform">
+                        Explore Methodologies <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+<div class="md:col-span-5 relative">
+<div class="aspect-[4/5] rounded-3xl overflow-hidden bg-surface-container-high shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-700">
+<img class="w-full h-full object-cover" data-alt="Modern high-end apothecary setting with warm amber glass bottles and organic terracotta textures in soft morning light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkccFyisCrz4Yr-wuF5EZ53-okj9Ng-9ZOQfW7QTk2UT_K69IE3LuM5rqLpWtqAubcFC1WhYvCuRF9YBMufOl-uLnowokdrLq_eY-7fGwP6popx6jszgI4lBsQjUoviVDCaKa9JGP5hunfc-qxwLi6gejIQB9uT_M6kWHDPX_4mHQOO-k0EmfXLIpZvyBColVkZ25-bWIthiuSgdPWt0Fs2Frcl2Q1nlKmJrl6K_4F57QZLzFpDxfdYzzLpnsQcJmox__Jer2pMdF4"/>
+</div>
+<div class="absolute -bottom-10 -left-10 p-8 bg-surface-container-lowest rounded-2xl shadow-xl max-w-[240px] border border-outline-variant/10">
+<div class="flex gap-2 mb-3">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="text-sm font-medium text-on-surface">"The most thoughtful medical experience I've ever had."</p>
+</div>
+</div>
+</div>
+<!-- Decorative Background Element -->
+<div class="absolute top-0 right-0 w-1/3 h-full bg-surface-container-low -z-10 translate-x-20 rounded-l-[100px]"></div>
+</section>
+<!-- Product Display Section -->
+<section class="py-32 bg-surface-container-low">
+<div class="max-w-7xl mx-auto px-8">
+<div class="flex justify-between items-end mb-16">
+<div class="max-w-xl">
+<h2 class="text-4xl font-bold mb-4">Our Remedies</h2>
+<p class="text-on-surface-variant">Science-backed treatments delivered with clinical precision and aesthetic grace.</p>
+</div>
+<button class="text-primary font-bold border-b-2 border-primary pb-1">View All Treatments</button>
+</div>
+<div class="grid md:grid-cols-3 gap-8">
+<!-- Product 1 -->
+<div class="group bg-surface-container-lowest rounded-[2rem] p-4 transition-transform hover:-translate-y-2">
+<div class="aspect-square rounded-[1.5rem] overflow-hidden mb-6 relative">
+<img class="w-full h-full object-cover" data-alt="Minimalist pharmaceutical product photography of a sleek amber glass vial on a soft beige stone surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBi9BS8nOF5OKJG8exLfJkH61IwqJbUJPbXm9Fh5YdlYjyusCHO_KHE6g4RikqzgUFfG47AyzCmnvHOsOVRrJqwdqIEZ_zvCWBwoykAfY5Gfeyns2OcPrrTzCyKa-14OCO0W6St6z_4gj6MBhNF3vQ29o_mgmyshUwY22Jbqsjxxl4C20aZusqS_EWbFu79DZnW1JxeNjRXYQn0mNna8oLan-VWkllmfYb47HB0uN01TCwLMnpE8KBXo3SRKhyLRVQmqhkOe46tfk0l"/>
+<div class="absolute top-4 left-4 bg-tertiary text-on-tertiary px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">Doctor Recommended</div>
+</div>
+<div class="px-4 pb-4">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-bold">Vitality Complex</h3>
+<span class="text-lg font-bold text-primary">$89</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-6">Optimized hormonal support for sustained energy and metabolic health.</p>
+<button class="w-full py-3 bg-secondary-container text-on-secondary-container font-bold rounded-full hover:bg-primary hover:text-on-primary transition-colors">Select Treatment</button>
+</div>
+</div>
+<!-- Product 2 -->
+<div class="group bg-surface-container-lowest rounded-[2rem] p-4 transition-transform hover:-translate-y-2">
+<div class="aspect-square rounded-[1.5rem] overflow-hidden mb-6 relative">
+<img class="w-full h-full object-cover" data-alt="High-end wellness supplements in designer packaging arranged on a textured ceramic tray with soft shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqZPLIqnHIjS07bF7bwR5aZ_HAFewVl-239o8ZRJnGohfzr1jPR1og89R1cOVq1BFNvok1MWv-nyYIbGm08JzGtl4-8OQ0rm4ytpBZVf7mkz41eJbWmS0_-fGrUYHtwI8Hq0a-xW8_fOSzVrxdIfwydg85NrNYAyZtAGTa-vC0Vic4OStQuqShgoJfX9OZy9oVG50Da-3eY2AZObFcQtP2U-kNGZ3ZM66i2yjjZ4y1UUx47WTFzTcrrqLxarQuCtd0t8iYj0T4cBjG"/>
+<div class="absolute top-4 left-4 bg-tertiary text-on-tertiary px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">Clinical Grade</div>
+</div>
+<div class="px-4 pb-4">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-bold">Metabolic Optimization</h3>
+<span class="text-lg font-bold text-primary">$124</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-6">Advanced weight management through personalized biometric feedback.</p>
+<button class="w-full py-3 bg-secondary-container text-on-secondary-container font-bold rounded-full hover:bg-primary hover:text-on-primary transition-colors">Select Treatment</button>
+</div>
+</div>
+<!-- Product 3 -->
+<div class="group bg-surface-container-lowest rounded-[2rem] p-4 transition-transform hover:-translate-y-2">
+<div class="aspect-square rounded-[1.5rem] overflow-hidden mb-6 relative">
+<img class="w-full h-full object-cover" data-alt="Clear apothecary bottle containing high-purity essential oil on a piece of raw terracotta rock" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVzGHig9ztlBAoGNsnkEWwe1DnUmw2u7qrSl3mm_ccagFyYEjYxsFUEpkOr-1_HORCT37b427HVFy93j7Q_nzYjKD019TJ9zmFxSLAvDIakQfnXoIpaNkOD3gRt6fcVQDXPbe8qSKdWoaSy_4hHS1qcIEDbWij4E1EUY-ILu4_t8nRYx0W88QhU_8fUxTyARed_RgqLrT2GQY24cqmLh-Gq7GHRdiJH73STQfXcn8k6rbtGqzHoM9w4jcVyQO3CDXQyD4wzHCcxrn3"/>
+</div>
+<div class="px-4 pb-4">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-bold">Neural Balance</h3>
+<span class="text-lg font-bold text-primary">$65</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-6">Nootropic precision for cognitive longevity and stress resilience.</p>
+<button class="w-full py-3 bg-secondary-container text-on-secondary-container font-bold rounded-full hover:bg-primary hover:text-on-primary transition-colors">Select Treatment</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Biometric Index (BMI Calculator) -->
+<section class="py-32 bg-surface">
+<div class="max-w-7xl mx-auto px-8">
+<div class="grid md:grid-cols-2 gap-20 items-center">
+<div class="order-2 md:order-1">
+<div class="bg-surface-container-lowest p-12 rounded-[3rem] shadow-sm border border-outline-variant/20">
+<h3 class="text-2xl font-bold mb-10 text-center">Biometric Index</h3>
+<!-- Height Slider -->
+<div class="mb-12">
+<div class="flex justify-between items-center mb-4">
+<label class="text-sm font-bold tracking-wider uppercase opacity-60">Height (cm)</label>
+<span class="text-xl font-bold text-primary">178</span>
+</div>
+<input class="w-full h-2 bg-secondary-container rounded-full appearance-none cursor-pointer accent-primary" max="220" min="140" type="range" value="178"/>
+</div>
+<!-- Weight Slider -->
+<div class="mb-12">
+<div class="flex justify-between items-center mb-4">
+<label class="text-sm font-bold tracking-wider uppercase opacity-60">Weight (kg)</label>
+<span class="text-xl font-bold text-primary">74</span>
+</div>
+<input class="w-full h-2 bg-secondary-container rounded-full appearance-none cursor-pointer accent-primary" max="150" min="40" type="range" value="74"/>
+</div>
+<div class="flex flex-col items-center justify-center p-10 bg-surface-container-low rounded-3xl">
+<div class="relative w-48 h-48 flex items-center justify-center mb-6">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-surface-container-highest" cx="96" cy="96" fill="transparent" r="88" stroke="currentColor" stroke-width="12"></circle>
+<circle class="text-primary" cx="96" cy="96" fill="transparent" r="88" stroke="currentColor" stroke-dasharray="552.92" stroke-dashoffset="138" stroke-width="12"></circle>
+</svg>
+<div class="absolute flex flex-col items-center">
+<span class="text-4xl font-extrabold">23.4</span>
+<span class="text-[10px] font-bold tracking-widest uppercase opacity-50">Score</span>
+</div>
+</div>
+<div class="text-center">
+<span class="bg-tertiary/10 text-tertiary px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest">Normal Range</span>
+</div>
+</div>
+</div>
+</div>
+<div class="order-1 md:order-2">
+<span class="text-tertiary font-bold tracking-widest uppercase text-sm mb-4 block">Personalized Metrics</span>
+<h2 class="text-5xl font-bold leading-tight mb-8">Measure what matters most.</h2>
+<p class="text-lg text-on-surface-variant leading-relaxed mb-8">
+                        Our biometric analysis goes beyond standard calculations. We use your data to architect a clinical path that honors your unique physiological blueprint.
+                    </p>
+<ul class="space-y-4">
+<li class="flex items-start gap-4">
+<span class="material-symbols-outlined text-primary mt-1">analytics</span>
+<div>
+<h4 class="font-bold">Precision Mapping</h4>
+<p class="text-sm text-on-surface-variant">Real-time data integration for immediate treatment adjustments.</p>
+</div>
+</li>
+<li class="flex items-start gap-4">
+<span class="material-symbols-outlined text-primary mt-1">shield_with_heart</span>
+<div>
+<h4 class="font-bold">Privacy First</h4>
+<p class="text-sm text-on-surface-variant">Encrypted clinical records that only you and your physician can access.</p>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<!-- Benefits Section -->
+<section class="py-32 bg-primary text-on-primary">
+<div class="max-w-7xl mx-auto px-8">
+<div class="text-center mb-20">
+<h2 class="text-4xl font-bold mb-6">Physician-Grade Philosophy</h2>
+<p class="max-w-2xl mx-auto opacity-80">Our treatments are engineered by world-class clinicians who believe that beauty and health are inextricably linked.</p>
+</div>
+<div class="grid md:grid-cols-2 gap-16">
+<div class="bg-primary-container p-12 rounded-[3rem] flex gap-8 items-start">
+<div class="bg-on-primary-container text-primary p-4 rounded-2xl">
+<span class="material-symbols-outlined text-3xl">favorite</span>
+</div>
+<div>
+<h3 class="text-2xl font-bold mb-4">Cardiac Precision</h3>
+<p class="opacity-80 leading-relaxed">Advanced cardiovascular optimization utilizing the latest in biomarker analysis. We focus on heart health not just for longevity, but for peak daily performance.</p>
+</div>
+</div>
+<div class="bg-primary-container p-12 rounded-[3rem] flex gap-8 items-start">
+<div class="bg-on-primary-container text-primary p-4 rounded-2xl">
+<span class="material-symbols-outlined text-3xl">psychology</span>
+</div>
+<div>
+<h3 class="text-2xl font-bold mb-4">Neural Balance</h3>
+<p class="opacity-80 leading-relaxed">Targeted cognitive enhancement and nervous system regulation. We treat the mind as the epicenter of physical well-being through verified pharmacological precision.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Testimonial Section -->
+<section class="py-32 bg-surface-container-low overflow-hidden">
+<div class="max-w-7xl mx-auto px-8 relative">
+<div class="absolute -top-10 -left-10 text-[12rem] font-serif text-primary opacity-5 select-none leading-none">“</div>
+<div class="max-w-4xl mx-auto text-center relative z-10">
+<span class="text-tertiary font-bold tracking-widest uppercase text-sm mb-12 block">Real Results</span>
+<p class="text-4xl font-bold leading-tight mb-12 italic">
+                    "Terracotta Wellness stripped away the clinical sterility I had come to expect from telehealth. It felt like I was being treated as a human being, with a plan that felt as bespoke as a tailored suit."
+                </p>
+<div class="flex flex-col items-center">
+<div class="w-16 h-16 rounded-full overflow-hidden mb-4 ring-4 ring-primary/10">
+<img class="w-full h-full object-cover" data-alt="Portrait of a sophisticated professional woman in a bright studio setting with soft natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0nnjJv7eoEttjROg7NTciFDXQGcexUM-dDtJjKnIMiBv0Tq4b-0kJfMzF1lT89zbMb_POn0JRhIjXg5o9N6pczW4bFpmG7KO7OpIYNxwGiwqR0Pcf0XY3GCJJ1uuik2FPyj3qgLsSlTyGLe0v5K75frSgQwKGZYuxC6czw_WI45zPESi0M2fidHpuwomQM9wYRAU0_tElJ2LGBat9cKzxLXfm2MQrXFnL2m6e3Sxib2lzyDVhk61J2XwF-7JZgV6yM1i4JO1geBZ1"/>
+</div>
+<h5 class="font-bold text-xl">Elena Vance</h5>
+<span class="text-primary font-bold tracking-widest uppercase text-xs">Premium Member</span>
+</div>
+</div>
+</div>
+</section>
+<!-- FAQ Section -->
+<section class="py-32 bg-surface">
+<div class="max-w-3xl mx-auto px-8">
+<h2 class="text-4xl font-bold mb-16 text-center">Common Inquiries</h2>
+<div class="space-y-6">
+<div class="bg-surface-container-low p-8 rounded-3xl">
+<div class="flex justify-between items-center cursor-pointer group">
+<h4 class="font-bold text-lg">How are consultations structured?</h4>
+<span class="material-symbols-outlined group-hover:rotate-180 transition-transform">expand_more</span>
+</div>
+<div class="mt-4 text-on-surface-variant leading-relaxed">
+                        Each consultation is a 30-minute deep dive with a board-certified physician. We review your biometrics, lifestyle, and clinical goals before curating your specific remedy protocol.
+                    </div>
+</div>
+<div class="bg-surface-container-low p-8 rounded-3xl">
+<div class="flex justify-between items-center cursor-pointer group">
+<h4 class="font-bold text-lg">Are the medications clinical grade?</h4>
+<span class="material-symbols-outlined group-hover:rotate-180 transition-transform">expand_more</span>
+</div>
+<div class="mt-4 hidden text-on-surface-variant leading-relaxed">
+                        Yes, all remedies are manufactured in ISO-certified facilities and undergo rigorous third-party testing to ensure maximum bioavailability and pharmacological purity.
+                    </div>
+</div>
+<div class="bg-surface-container-low p-8 rounded-3xl">
+<div class="flex justify-between items-center cursor-pointer group">
+<h4 class="font-bold text-lg">How does the delivery process work?</h4>
+<span class="material-symbols-outlined group-hover:rotate-180 transition-transform">expand_more</span>
+</div>
+<div class="mt-4 hidden text-on-surface-variant leading-relaxed">
+                        Remedies are shipped in discreet, temperature-controlled editorial packaging via expedited courier to ensure integrity from our pharmacy to your doorstep.
+                    </div>
+</div>
+</div>
+</div>
+</section>
+<!-- Appointment Booking CTA -->
+<section class="max-w-7xl mx-auto px-8 py-20">
+<div class="bg-primary rounded-[4rem] p-20 text-center relative overflow-hidden">
+<!-- Decorative circle -->
+<div class="absolute -top-24 -right-24 w-64 h-64 bg-primary-container rounded-full opacity-50 blur-3xl"></div>
+<div class="absolute -bottom-24 -left-24 w-64 h-64 bg-primary-container rounded-full opacity-50 blur-3xl"></div>
+<div class="relative z-10">
+<h2 class="text-6xl font-extrabold text-on-primary mb-8 max-w-2xl mx-auto leading-tight">Ready to refine your wellness?</h2>
+<p class="text-xl text-on-primary opacity-80 mb-12 max-w-xl mx-auto">Join the new era of clinical care. Bespoke treatments for the modern individual.</p>
+<button class="bg-surface text-primary px-12 py-6 rounded-full font-bold text-xl hover:bg-surface-container-lowest transition-all active:scale-95 shadow-xl shadow-black/10">BOOK CONSULTATION</button>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-[#f6f3ee] dark:bg-stone-900 full-width py-12 tonal-shift top-border-none">
+<div class="flex flex-col md:flex-row justify-between items-center px-12 w-full max-w-7xl mx-auto">
+<div class="mb-8 md:mb-0">
+<div class="text-lg font-bold text-[#6f281c] dark:text-[#8d3e31] mb-2">Terracotta Wellness</div>
+<p class="text-stone-500 dark:text-stone-400 text-sm">© 2024 Editorial Wellness. The Modern Apothecary.</p>
+</div>
+<div class="flex gap-8">
+<a class="text-stone-500 dark:text-stone-400 text-sm font-medium tracking-wide hover:text-[#6f281c] dark:hover:text-white transition-opacity" href="#">Privacy Policy</a>
+<a class="text-stone-500 dark:text-stone-400 text-sm font-medium tracking-wide hover:text-[#6f281c] dark:hover:text-white transition-opacity" href="#">Terms of Service</a>
+<a class="text-stone-500 dark:text-stone-400 text-sm font-medium tracking-wide hover:text-[#6f281c] dark:hover:text-white transition-opacity" href="#">Contact Us</a>
+<a class="text-stone-500 dark:text-stone-400 text-sm font-medium tracking-wide hover:text-[#6f281c] dark:hover:text-white transition-opacity" href="#">Press Kit</a>
+</div>
+</div>
+</footer>
+</body></html>

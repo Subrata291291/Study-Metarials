@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!--Difference between var let const-->
+    <p id="password"></p>
+    <button onclick="myFunction()">click to check passord</button>
+    <script>
+        /*Difference between var,let,const*/
+        var userName = "subrata";
+        let userEmail = "test@gmail.com";
+        const userAddress = "Burdwan"
+        console.log(userName,userEmail,userAddress);
+        console.table([userName,userEmail,userAddress]);
+
+        var userName = "nandita" // we can reasign the same name uing var
+        console.log(userName)
+
+        //let userEmail = "test1@gmail.com"; // we can't reasign the same name uing let
+        console.log(userEmail);
+
+        //This is a scope where we have used let and reassign the value
+        function myFunction() {
+            let userPaword = "Password";
+            userPaword = "newapsword"
+            document.getElementById("password").innerHTML= userPaword;
+        }
+    </script>
+    <!--Difference between var let const-->
+
+    <!--Data Types-->
+    <script>
+        let age = 18; // this is a number
+        let accountName = "subrata" // this is a string
+        let isLoggedin = true; // this is a boolean
+        let state; // this is undefined
+        let city = null // null can be used intentinally as a empty value, it's a standalone value, null is also a object
+        // there are also a data types- symbol
+        console.log(typeof age); // this is object
+        console.log(typeof undefined); // this is not a object
+        console.log(typeof null); // this is a object
+    </script>
+    <!--Data Types-->
+
+    <!--Data Types converion-->
+    <script>
+        //Number Conversion
+        let score = "33ssh"; // it is also a number
+        console.log(typeof score)
+        console.log(typeof (score));
+        
+        let valueInNumber = Number(score) // now it's fixed to provide the data type a number
+        console.log(typeof valueInNumber)
+        // "33" => 33
+        // "33ssh" => NaN (Not a Number)
+        // true => true (it will pass 1)
+        // false => (it will pass 0)
+
+        //String conversion
+        let somenumber = 65;
+        console.log(somenumber);
+        let updatedSomeNumber = String(somenumber);
+        console.log(typeof updatedSomeNumber)
+
+        //Boolean conversion
+        let isLoggedout = 1; //it will pass true
+        isLoggedout = 0 // it will pass false
+        isLoggedout = "subrata" // it will pass true
+        console.log(isLoggedout);
+        console.log(typeof isLoggedout)
+        let booleanIsLoggedout = Boolean(isLoggedout);
+        console.log(booleanIsLoggedout)
+    </script>
+    <!--Data Types converion-->
+
+    <!--Operations-->
+    <script>
+        let str1 = 1;
+        let str2 = 2;
+        let str3 = str1 + str2;
+        console.log(str3);
+        console.log("1" + 2 + 3);
+        console.log(1 + 2 + "3");
+        console.log(1 + 2 + 3);
+
+        //Prefix 
+        let gameCounter = 100;
+        console.log(++gameCounter);
+        
+        // Postfix
+        console.log(gameCounter++);
+    </script>
+    <!--Operations-->
+
+    <!-- Comparison of datatypes -->
+     <script>
+        console.log(2 > 1);
+        console.log(2 < 1);
+        console.log(1 >= 2);
+        console.log(1 <= 2);
+        console.log(1 == 1);
+        console.log(1 != 1);
+        
+        console.log(null > 0);
+        console.log(null < 0);
+        console.log(null == 0);
+        console.log(null != 0);
+
+        console.log(undefined > 0);
+        console.log(undefined < 0);
+        console.log(undefined == 0);
+        console.log(undefined != 0);
+        
+        // === 
+        console.log("2" == 2); // it will pass true because javascrit will treat the string as a number here
+        console.log("2" === 2); // but in this case javascript will treat as a strict mode, it will check it's a string and number, both are diffent. show it will pass false  
+     </script>
+    <!-- Comparison of datatypes -->
+
+    <!-- Primitive and Non-Primitive datatypes -->
+     <script>
+        /* Premitive datatypes*/
+       // String, Number, Undefined, Null, Boolean, Symbol, Bigint
+       const myScore = 100;
+       const myScoreValue = 100.25
+       const isLoggedinUser = true;
+       const outSideTerm = null;
+       let userBox;
+       const id = Symbol('123');
+       const anotherId = Symbol('123');
+       console.log(id === anotherId);
+        const bigNumber = 83383574374743n;
+        console.log(typeof bigNumber);
+        
+        /*Non-premitive/reference data types*/
+        // Array, Objects, Funcions
+        const myHeroes = ["Shaktian", "Batman", "Superman"] // This is an Array
+
+        let names = { //This is an Object
+            name: "Subrata",
+            age: 30,
+        }
+        const myNameFunction = function() { // this is a function
+            console.log("hello World");
+        }
+        console.log(typeof myNameFunction);
+     </script>
+    <!-- Primitive and Non-Primitive datatypes -->
+
+    <!-- Stack(Primitive) and Hip Memory(Non-Primitive) -->
+     <script>
+        //Stack Memory
+        let myYoutubeChannel = "subratahalderdotcom"
+        let myNewYoutubeChannel = myYoutubeChannel;
+        myNewYoutubeChannel = "haldarsubrata"
+        console.log(myYoutubeChannel);
+        console.log(myNewYoutubeChannel);
+        /* In Stack memory we can only a copy of the value*/
+
+        //Hip Memory
+        let userOne = {
+            email: "user1@gmail.com",
+            id: 1
+        }
+        console.log(userOne.email);
+
+        let userTwo = userOne;
+
+        userTwo.email = "newuser@gmai.com"
+
+        console.log(userTwo.email);
+        /* In Hip memory we get the reference of the value*/
+     </script>
+    <!-- Stack(Primitive) and Hip Memory(Non-Primitive) -->
+
+    <!-- Strings -->
+     <script>
+        let repoName = "Subrata"
+        let repoCount = 500
+        console.log(repoName + repoCount); // this is an old concept
+        console.log(`my repo name is ${repoName} and my repo name is ${repoCount}`); //this is the modern concept using backtips
+        console.log(`${repoName.toUpperCase()}`); // We can also like this
+        
+        let newRepoName = new String("Subrata-Halder")
+        console.log(newRepoName);
+        console.log(newRepoName[1]);
+        console.log(newRepoName.charAt(1));
+        console.log(newRepoName.indexOf('u'));
+        console.log(newRepoName.length);
+
+        let updateNewRepoName = newRepoName.substring(0, 5) //Substring method
+        console.log(updateNewRepoName);
+
+        let anotherUpdateNewRepoName = newRepoName.slice(0,4) //Slice Method
+        console.log(anotherUpdateNewRepoName);
+
+        let anotherUpdateNewRepoName1 = "   subrata   " // trim method
+        console.log(anotherUpdateNewRepoName1);
+        console.log(anotherUpdateNewRepoName1.trim());
+
+
+        let url = "https://fonts.google.com/subrata%20halder" //replace method
+        console.log(url.replace('%20', '-'));
+
+        console.log(url.includes('subrata')) // includes method to earch any index is available or not
+
+        console.log(newRepoName);
+        console.log(newRepoName.split('-')); // split method
+        
+     </script>
+    <!-- Strings -->
+
+    <!-- Numbers and maths -->
+     <script>
+        //Numbers
+        let price = 700.155
+        console.log(price);
+        console.log(price.toFixed(2));
+
+        let newPrice = 1000000000000000
+        console.log(newPrice);
+        
+        console.log(newPrice.toLocaleString('en-In'));
+        
+        //Maths
+        console.log(Math);
+        console.log(Math.abs(-4)); // negetive sign will be hide
+        console.log(Math.round(4.5)); // the value will be calculate to rounded value
+        console.log(Math.ceil(4.2)); // the value will be calculate to highest value
+        console.log(Math.floor(4.2)); // the value will be calculate to lowest value
+        console.log(Math.min(2,3,7)); // the value will be calculate to minimum value
+        console.log(Math.max(4,8,5)); // the value will be calculate to maximum value
+        console.log(Math.random()); // the value will be calculate from 0-1 value
+
+        console.log(Math.random());
+        console.log(Math.random()*10) +1;
+        console.log(Math.floor(Math.random()*10) +1);  
+     </script>
+    <!-- Numbers and maths -->
+
+    <!-- Date and time -->
+     <script>
+        let myDates = new Date()
+        console.log(myDates);
+        console.log(myDates.toISOString());
+        console.log(myDates.toString());
+        console.log(myDates.toLocaleString());
+        
+        console.log(typeof myDates);
+
+        let checkDates = new Date(2020,0,22) // year-month-date
+        let checkDatesWithTime = new Date(2020,0,22,5,3) // year-month-date-hour-minutes
+        let checkCustomDatesWithTime = new Date("2023-01-23") // dd-mm-yyyyy custom
+        console.log(checkCustomDatesWithTime.toLocaleString());
+
+        let newDate = new Date()
+        console.log(newDate); //Current date with time
+        console.log(newDate.getDate()); // Current date
+        console.log(newDate.getDay()); // Cureent day based on suday-monday
+        console.log(newDate.getMonth());
+        console.log(newDate.getTime());
+        console.log(newDate.getHours()); // Current hours
+        console.log(newDate.getMinutes()); // Current Minutes
+     </script>
+    <!-- Date and time -->
+
+    <!-- Array -->
+     <script>
+        // [] Brackets {} Curly Brackets () First Brackets
+        let myAarray = [0,1,2,3,4,5]
+        console.log(myAarray[0]);
+        
+        let myUsers = ['subrata', 'Rohit', 'john']
+        console.log(myUsers);
+        console.log(myUsers[1]);
+
+        //Aarray methods
+        myUsers.push('Brian') // to add objects to the last
+        console.log(myUsers);
+
+        myUsers.pop() // to delete objects form last
+        console.log(myUsers);
+
+        myUsers.unshift('John1') // to add to the first
+        console.log(myUsers);
+
+        myUsers.shift() // to delete from the first
+        console.log(myUsers);
+
+        console.log(myUsers.includes("john")); // to check the value is in the arry or not
+        console.log(myUsers.indexOf('Rohit')); // to check the value location in the arry
+        
+        let newArray = myUsers.join() // to convert the values to the string and also remove the brackets
+        console.log(newArray);
+        console.log(typeof newArray);   
+
+        let score1 = 100
+        let score2 = 200
+        let score3 = 300
+        console.log(Array.of(score1,score2,score3)); // converted all elements within an aray
+
+     </script>
+    <!-- Array -->
+
+    <!-- Objects -->
+     <script>
+        // singleton
+        //object literals
+
+        const myObjects = {
+            name: "Subrata",
+            age: 20,
+            "full name" : "Subrata Halder",
+            address: "Kolkata"
+        }
+        console.log(myObjects);
+        console.log(myObjects.name); // old method
+        //console.log(myObjects.full name); // it will not work
+        
+        console.log(myObjects["name"]); // current method
+        console.log(myObjects["full name"]);
+        console.log(typeof myObjects["full name"]);
+        
+        // How to declare symbol
+        let mySymbol = Symbol("Key1")
+
+        const myObject1 = {
+            city: "Kolkata",
+            [mySymbol]: "new key"
+        }
+        console.log(myObject1.mySymbol); // this is showing the new value of the symbol, but it's data type is not symbol, it's a object right now
+        console.log(myObject1);
+        console.log(typeof myObject1[mySymbol]);
+        
+        //How to lock/freeze any value of an object
+        myObjects.address = "Delhi"
+        console.log(myObjects.address);
+
+        Object.freeze(myObjects); // This is the lock process, the previous value will be not changed.
+        myObjects.address = "Bangaluru"
+        
+
+        const tinderUser = new Object() //Singleton Object
+        console.log(tinderUser);
+
+        const tinderUser1 = {} //Non-Singleton Object
+        console.log(tinderUser1);
+
+
+        tinderUser.id = 1
+        tinderUser.name = "John"
+        tinderUser.isLoggedin = false
+        //console.log(tinderUser);
+
+        const regularUser = {
+            email: "user@gmai.com",
+            fullName: {
+                uerFullName: {
+                    firstName: "John",
+                    lastName: "Doe"
+                }
+            }
+        }
+        console.log(regularUser);
+        console.log(regularUser.email);
+        console.log(regularUser.fullName);
+
+
+        const obj1 ={
+            1: "a",
+            2: "b",
+            3: "c"
+        }
+        // here 1 is key and the a is the key value
+        const obj2 = {
+            4: "d",
+            5: "e",
+            6: "f"
+        }
+        const fialObj = {obj1,obj2}
+        console.log(fialObj);
+
+        //const objResult  = Object.assign(obj1,obj2)// old method
+        //const objResult  = Object.assign({}, obj1,obj2)//New Method
+        // {}- this is the target and obj1,obj2 these are the source 
+        const objResult  = {...obj1, ...obj2} //wecan alsoue spread operator
+
+        console.log(objResult);
+        
+        // When we will get data from database it should like-
+        const siteUsers = [
+            {
+                id: 1,
+                name: "user",
+                email: "user@gail.com"
+            },
+            {
+                id: 2,
+                name: "user1",
+                email: "user1@gail.com"
+            }
+        ]
+        console.log(siteUsers[0].email); //0 is the first object
+
+        console.log(tinderUser);
+        console.log(Object.keys(tinderUser)); //we can access the key of an Array
+        console.log(Object.values(tinderUser)); // we can access the values of an Array
+        console.log(Object.entries(tinderUser));
+        console.log(tinderUser.hasOwnProperty("id"));
+     </script>
+    <!-- Objects -->
+
+    <!-- Object de-structure and JSON API-->
+     <script>
+        const courseDeatails = {
+            courseName: "Javascript",
+            courseAmount: 3000,
+            courseDuration: "5 months"
+        }
+        console.log(courseDeatails);
+        console.log(courseDeatails.courseAmount); // this way we get the info of a object
+
+        const {courseDuration: duration} = courseDeatails
+        console.log(duration); // this way e can de-structraing the name
+        
+        //Application Programming Interface (API)
+
+        // An API is a set of rules and tools that allows two software applications to communicate with each other.
+
+        // It’s like a waiter in a restaurant.
+
+        // You (the user) tell the waiter (API) what you want.
+
+        // The waiter takes the order to the kitchen (server) and brings the food (data) back to you.
+
+        // Examples
+
+        // Google Maps API → lets apps use Google Maps inside their own app/website.
+
+        // Payment Gateway API (Razorpay, PayPal, Stripe) → lets you add payments to your site.
+
+        // Weather API → gives real-time weather data for your city.
+
+        //API provide us the JSON data like-
+        [
+            {
+                "id": 1,
+                "name": "user1"
+            },
+            {
+                "id": 2,
+                "name": "user2"
+            }
+        ]
+        //Dummy API like- https://randomuser.me/
+        //https://randomuser.me/api/
+
+        // you can beautify the json here- https://jsonformatter.org/
+     </script>
+    <!-- Object de-structure and JSON API-->
+
+    <!-- Functions and parameter -->
+     <script>
+        //console.log();
+        //console.log(); // shift+alt+downkey to copy lines
+        // ()- this is called paraenthies
+        // {}- this is a score here
+        function myFunction() {
+            console.log("S");
+            console.log("U");
+            console.log("B");
+            console.log("R");
+            console.log("A");
+            console.log("T");
+            console.log("A");
+        }
+        //myFunction()
+
+        function myNumbers(number1,number2) { //this are called parameters
+            console.log(number1 + number2);
+        }
+        myNumbers(2,7) // these value are called arguments
+        // if we pass the numbers lke this-
+        myNumbers(2,"4") //it will pass 24 as beacuse js will show them as a string
+
+        function myResult(result1, result2) {
+            let result = result1 + result2
+            return result
+        }
+        const finalResult = myResult(5,3)
+        console.log(finalResult);
+        
+
+        function newResult(username) {
+            return `${username} just logged in`
+        }
+        console.log(newResult("Subrata"));
+        
+        function newResult1(username) { //function using if condition with ===
+            if (username === undefined) {
+                console.log("please enter a user name");
+                return
+            }
+            return `${username} just logged in`
+        }
+        console.log(newResult1());
+        
+        function newResult2(username){ //function using if condition with !
+            if(!username) {
+                console.log("Please login");
+                return
+            }
+            return `${username}`
+        }
+        console.log(newResult2());
+
+        function newResult3(username = "user") { //in this type the confirm value will pass as user
+            if(!username) {
+                console.log("please login");
+                return
+            }
+            return `${username}`
+        }
+        console.log(newResult3());
+     </script>
+    <!-- Functions and parameter -->
+
+    <!-- Functions with objects and array -->
+    <script>
+    function caculateCartprice(numb1) {
+        return numb1
+    }
+    console.log(caculateCartprice(200)); // this is a simple way to check parameter
+
+    function caculateCartprice1(...num2) { // this is a rest operator to get multiple parameter
+        return num2
+    }
+    console.log(caculateCartprice1(200,300,400));
+    
+    // Function using objects
+    const user = {
+        username: "Subrata",
+        price: 199
+    }
+    function handleObject(newValue) {
+        console.log(`User name is ${newValue.username} and Price is ${newValue.price}`);
+    }
+    handleObject(user)
+
+    // Function using Array
+    const newArrayValue = [100,200,300,400]
+    function arrayFunction(arrayValue){
+        return arrayValue[1]
+    }
+    console.log(arrayFunction(newArrayValue));
+    </script>
+    <!-- Functions with objects and array -->
+
+     <!-- Global and local scope -->
+    <script>
+    // This is called global scope
+    var a = 10
+    let b = 20
+    const c = 30
+
+    console.log(a);
+    console.log(b);
+    console.log(c);
+
+    if(true) { // this is called block scope
+        var a = 15
+        let b = 20
+        const c = 25
+    }
+        
+    //console.log(a);
+    //console.log(b);
+    //console.log(c);
+    </script>
+    <!-- Global and local scope -->
+
+    <!-- Scope level and mini hoisting -->
+     <script>
+        function one() {
+            const username = "Subrata"
+            
+            function two() { // this is called nesting function which can access the parent value
+                const channel = "Youtube"
+                console.log("Hello",username);
+                //console.log(channel); it will display the value as because it's inside into the scope
+            }
+            //console.log(channel); // it will not execute as because the scope has ended already
+            two()
+        }
+        one() // it will show the username helping from two()
+     </script>
+     <!-- Scope level and mini hoisting -->
+
+     <!-- THIS and arrow function -->
+     <script>
+        const test2 = { //this is THIS
+            username: "Subrata",
+            id: 2,
+            welcomemessage: function() {
+                console.log(`${this.username}, Welcome to our site`);
+                console.log(this);
+            }
+        }
+        test2.welcomemessage();
+        test2.username = "Newuser"
+
+
+        const myNumbers1 = (num1, num2) => { // this is called arrow function
+            return num1 + num2
+        }
+        console.log(myNumbers1(4,3));
+        
+        const myNumbers2 = (num1,num2) => num1 + num2
+        console.log(myNumbers2(4,9));
+
+        const myNumbers3 = (num1,num2) => (num1+num2)
+        console.log(myNumbers3(6,8));
+        // Note- If we use {} curly breshes we need to pass return on it, but if we use () parentishes no need to use return
+
+        const newUsers = () => {username: "Subrata"}
+        console.log(newUsers());
+        // If we try to use object like this it will show undefined, we need to take the object under ()parentishes
+        const newUsers1 = () => ({username: "subrata"})
+        console.log(newUsers1());
+     </script>
+     <!-- THIS and arrow function -->
+
+     <!-- Immediately Invoked Function Expressions IIFE -->
+      <script>
+        // function newFunctions() {
+        //     console.log(`Database Connected`);
+        // }
+        // newFunctions()
+
+        (function newFunctions() { // Ths is a named IIFE
+            console.log(`Database not connected`);
+        })(); // without this semicolon the next function will not execute
+
+        ((user) => { //this is a simple IIFE
+            console.log(`new user added ${user}`);
+        })('Subrata')
+      </script>
+     <!-- Immediately Invoked Function Expressions IIFE -->
+
+     <!-- Control flow -->
+      <script>
+        //if Statement
+        // if(condition) {
+
+        // }
+
+        // if(true) {
+        //     //if the conditon is true then DOM will execute the if or if the condition is false then DOM will not execute the if
+        // }
+        // In this condition we will use operator like- >, <, >=, <=, ==, !=, ===
+        const currentTemp = 42;
+
+        if (currentTemp < 50) {
+        console.log("Temperature is less than 50");
+        } else {
+        console.log("Temperature is greater than or equal to 50");
+        }
+
+        //Block scope using let
+        const scoreList = 300;
+        if( scoreList > 200 ) {
+            let scoreStatus = "High";
+            console.log(`Score Status is ${scoreStatus}`);
+        }
+        //console.log(`Score Status is ${scoreStatus}`);// in this condition if we check status outside of the scope we will get data value of the scope using var
+        
+        //Block scope using let
+        const scoreListUpdated = 300;
+        if( scoreListUpdated > 200 ) {
+            var scoreStatus = "HighStatus";
+        }
+        console.log(`Score Status is ${scoreStatus}`);// using var in scope it will work like globar declare. it will work outside also from the scope
+      
+        // if else statement
+        const amount = 1500
+
+        if (amount < 500) {
+            console.log("Amount is less than 500");
+        } else if (amount < 700) {
+            console.log("Amount is less than 700");
+        } else {
+            console.log("Amount is grether than 1000");
+        }
+
+        // if else statement using multiple conditions like - && (Logical AND operator)
+        const userLoggedIn = true
+        const DebitCard = false
+
+        if (userLoggedIn && DebitCard) { //in this condition both values need to true
+            console.log(`User is allowed to shopping`);
+        } else {
+            console.log(`User is not allwed to shopping`); 
+        }
+
+        // if else statement using multiple conditions like - || (Logical OR operator)
+        const userLoggedIn1 = true
+        const DebitCard1 = false
+
+        if (userLoggedIn1 || DebitCard1) { //in this condition one of the value need to true
+            console.log(`User is allowed to shopping`);
+        } else {
+            console.log(`User is not allwed to shopping`); 
+        }
+
+        // Switch Case
+        // switch (key) {
+        //     case value:
+                
+        //         break;
+        
+        //     default:
+        //         break;
+        // }
+
+        const CurrentMonth = 9
+        switch (CurrentMonth) {
+            case 1:
+                console.log("Current month is January");
+                break; // break is use to flow the control
+            case 2:
+                console.log("Current month is February");
+                break;
+            case 3:
+                console.log("Current month is March");
+                break;
+            case 4:
+                console.log("Current month is April");
+                break;
+            case 5:
+                console.log("Current month is May");
+                break;
+            case 6:
+                console.log("Current month is June");
+                break;
+            case 7:
+                console.log("Current month is July");
+                break;
+            case 8:
+                console.log("Current month is August");
+                break;
+            case 9:
+                console.log("Current month is September");
+                break;
+            case 10:
+                console.log("Current month is October");
+                break;
+            case 11:
+                console.log("Current month is November");
+                break;
+            case 12:
+                console.log("Current month is December");
+                break;
+        
+            default:
+                console.log("Default case matched");
+                break;
+        }
+
+        const month1 = "sept"
+        switch (month1) {
+            case "january":
+                console.log("month is january");
+                break;
+            case "february":
+                console.log("month is february");
+                break;
+            case "march":
+                console.log("month is march");
+                break;
+            case "april":
+                console.log("month is april");
+                break;
+            case "may":
+                console.log("month is may");
+                break;
+            case "june":
+                console.log("month is june");
+                break;
+            case "july":
+                console.log("month is july");
+                break;
+            case "august":
+                console.log("month is august");
+                break;
+            case "sept":
+                console.log("month is sept");
+                break;
+            case "oct":
+                console.log("month is oct");
+                break;
+            case "nov":
+                console.log("month is nov");
+                break;
+            case "dec":
+                console.log("month is dec");
+                break;
+        
+            default:
+                break;
+        }
+
+      </script>
+     <!-- Control flow -->
+
+     <!-- truthy and falsy values-->
+     <script>
+        // falsy values- 0, -0, false, "", '', Bignt(0n), null, undefined, NaN(not a number)
+        // truthy values- "false", '0', " ", ' ', [], {}, function(){}
+
+        //const myUsersList = "Subrata"// if there is a string then it will be truthy value.
+        //const myUsersList = [] // still it will give output as a truthy value based on the JS rules
+        const myUsersList = 0 // It will pass falsy value based on the JS rule
+        if (myUsersList) {
+            console.log(`User name is available`);
+        } else {
+            console.log(`User name is not availbale`);
+        }
+     </script>
+     <!-- truthy and falsy values-->
+
+     <!-- Terniary Operator-->
+      <script>
+        //condition ? true : false
+        const productPrice = 999
+        productPrice <= 700 ? console.log("less than 700") : console.log("More than 700"); //condition ? true_value : false_value
+      </script>
+     <!-- Terniary Operator-->
+
+     <!--For loop with break-->
+     <script>
+        // for (let index = 0 ; index < 10 ; index++) {
+        //     let indexResult = index;
+        //     console.log(indexResult);
+        // }//double click on the index and press ctrl+d to select multiple same text
+
+        // for (let i = 1 ; i <= 10 ; i++) {
+        //     console.log(`Outer loop value is: ${i}`);
+        //     for (let j = 0; j <= 10; j++) {
+        //         console.log(`Inner Loop value is: ${j}`); 
+        //     }
+        // } // Loop in  loop
+
+        // for (let i = 1; i <= 5 ; i++) {
+        //     for (let j = 1; j <= 5; j++) {
+        //         console.log(`${i} * ${j} = ${i * j}`);
+        //     }
+        // }// Multiply calculation using loop
+
+        // for (let index = 0; index < 5; index++) {
+        //     console.log(`${index} * 5 = ${index * 5}`);
+        // }
+
+        // for (let index = 0; index < 15 ; index++) {
+        //     if(index == 5) {
+        //         console.log(`detected 5`);
+        //         break
+        //     }
+        //     console.log(index);
+        // }
+
+        // for (let index = 0; index < 15 ; index++) {
+        //     if(index == 5) {
+        //         console.log(`detected 5`);
+        //         continue
+        //     }
+        //     console.log(index);
+        // }
+     </script>
+     <!--For loop with break-->
+
+     <!--While and do while loop-->
+     <script>
+        //While loop
+        // let result = 0;
+        // while (result <= 100) {
+        //     console.log(`the result is: ${result}`);
+        //     result = result+2
+        // }
+
+        // let supermans = ["Batan", "Superman", "Spiderman"]
+
+        // let supermanNumbers = 0;
+
+        // while (supermanNumbers < supermans.length) {
+        //     console.log(`The name of super heroes are: ${supermans[supermanNumbers]}`);
+        //     supermanNumbers = supermanNumbers + 1
+        // }
+        
+        //Do while loop
+        let newScore = 1;
+        do {
+            console.log(`The score is: ${newScore}`);
+            newScore++
+            
+        } while (newScore < 5 );
+     </script>
+     <!--While and do while loop-->
+
+     <!--High Order Array loops-->
+     <script>
+        //for of loop
+        let value = [1,2,3,4,5,6]
+        for (const element of value) {
+            console.log(element);
+        }
+
+        const grettings = "hello world";
+        for (const greet of grettings) {
+            console.log(greet);
+            
+        }
+        
+        //for in loop (using object value)
+        const courseDeatils = {
+            HTML: "Hypertext Markup Language",
+            CSS: "Cashcading Style Sheet",
+            JS: "Javascript"
+        }
+        // for (const key in courseDeatils) {
+        //     console.log(key);
+        // }
+
+        for (const key in courseDeatils) {
+            console.log(`${key} is stands for ${courseDeatils[key]}`); 
+        }
+
+        //for in loop (using Array value)
+        const programming = ["JS","Python","Larabel","C++"]
+        for (const key in programming) {
+            //console.log(key);
+            //console.log(`The Programming langauage are - ${programming[key]}`);
+        }
+
+        //for each loop
+        const coding = ["JS","Python","Larabel","C++","HTML"]
+        coding.forEach(function(item){
+            //console.log(item);
+            
+        })
+
+        coding.forEach((item) => { //using arrow function method
+            //console.log(item);
+        });
+
+        function printMe(item) {
+            //console.log(item);
+        }
+        //coding.forEach(printMe)
+
+        coding.forEach( (item,index,array) => {
+            console.log(item,index,array);
+        })
+
+        const language = [
+            {
+                languageName : "Java",
+                price: 2000
+            },
+            {
+                languageName : "Python",
+                price: 5000
+            },
+            {
+                languageName : "mySql",
+                price: 7000
+            },
+            {
+                languageName : "web evelopment",
+                price: 9000
+            }
+        ]
+
+        language.forEach ( (item) => {
+            console.log(`Language name is- ${item.languageName} and the price is - ${item.price}`)
+        })
+     </script>
+     <!--High Order Array loops-->
+
+     <!--Filter map and reduce-->
+     <script>
+        const myNumbs= [1,2,3,4,5,6,7,8,9,10]
+
+        // const filtered =  myNumbs.filter((nums)=> {
+        //     return nums > 5
+        // })
+        // console.log(filtered);
+
+        const filtered = myNumbs.filter( (nums)=> nums > 5 )
+        console.log(filtered);
+        //In filter methodwe get a callack function where we need to access each value then condition
+
+        //Projects using filter method
+        const books = [
+            { title: "JavaScript Basics", author: "John Doe", price: 15.99, type: "Programming" },
+            { title: "Advanced CSS", author: "Jane Smith", price: 18.50, type: "Design" },
+            { title: "Python for Beginners", author: "Alex Carter", price: 22.00, type: "Programming" },
+            { title: "UI/UX Principles", author: "Maria Lopez", price: 25.00, type: "Design" },
+            { title: "World War II", author: "James Brown", price: 19.99, type: "History" },
+            { title: "Ancient Civilizations", author: "Linda Johnson", price: 17.99, type: "History" },
+            { title: "Modern Physics", author: "Albert Newton", price: 29.99, type: "Science" },
+            { title: "The Solar System", author: "Carl Kepler", price: 21.50, type: "Science" },
+            { title: "Meditation Guide", author: "Sophia Lee", price: 12.99, type: "Self-help" },
+            { title: "Time Management", author: "Michael Scott", price: 14.99, type: "Self-help" },
+            { title: "The Great Gatsby", author: "F. Scott Fitzgerald", price: 10.99, type: "Fiction" },
+            { title: "1984", author: "George Orwell", price: 9.99, type: "Fiction" },
+            { title: "React in Action", author: "Mark Thomas", price: 28.50, type: "Programming" },
+            { title: "Data Science Handbook", author: "Emma Davis", price: 32.00, type: "Programming" },
+            { title: "Graphic Design Basics", author: "Oliver White", price: 16.99, type: "Design" },
+            { title: "Renaissance Art", author: "Isabella Rossi", price: 23.99, type: "History" },
+            { title: "Astrophysics 101", author: "Neil Tyson", price: 27.50, type: "Science" },
+            { title: "Healthy Eating", author: "Chris Evans", price: 13.49, type: "Self-help" },
+            { title: "Sherlock Holmes", author: "Arthur Conan Doyle", price: 11.99, type: "Fiction" },
+            { title: "Machine Learning", author: "Andrew Ng", price: 35.00, type: "Programming" }
+        ];
+
+        // const bookResult = books.filter( (items)=> items.type === 'Science' ) 
+        // console.log(bookResult);
+
+        // const bookResult = books.filter( (items)=> items.price >= 32.00)
+        // console.log(bookResult);
+        
+        // const bookResult = books.filter( (items)=> {return items.price >= 32.00})
+        // console.log(bookResult);
+
+        // const bookResult = books.filter( (items)=> {
+        //     return items.price <= 32.00 && items.type === 'Science'
+        // })
+        // console.log(bookResult);
+
+        // const bookResult = books.filter( (items) => items.author === 'Andrew Ng' || items.author === 'Chris Evans') || items.price < 35.00
+        // console.log(bookResult);
+
+        //Map method
+        // const myScroes = [1,2,3,4,5,6,7,8,9,10]
+        // const scoreOuput = myScroes.map ( (items)=> items + 10)
+        // console.log(scoreOuput);
+
+        //Differences between filter nd map
+
+        // 1. map()
+
+        // Purpose: Transforms each item in the array.
+
+        // Output: Always returns a new array of the same length as the original.
+
+        // Use case: When you want to create a new array by changing each element.
+
+        // 2. filter()
+
+        // Purpose: Selects elements that match a condition.
+
+        // Output: Returns a new array that may be shorter or empty, depending on the condition.
+
+        // Use case: When you want to keep only certain items.
+        
+        // const myScroes = [1,2,3,4,5,6,7,8,9,10] Same method using for each condtion
+        
+        // myScroes.forEach((item) => {
+        //     if (item > 5) {
+        //         console.log(item);
+        //     }
+        // });
+
+        const myScroes = [1,2,3,4,5,6,7,8,9,10]
+
+        // const finalscores = myScroes.map( (nums) => nums * 10)
+        // console.log(finalscores);
+
+        // const finalscores = myScroes.map( (nums) => nums * 10).map( (nums) => nums + 1)
+        // console.log(finalscores);
+
+        // const finalscores = myScroes.map( (nums) => nums * 10).map( (nums) => nums + 1).filter( (nums)=> nums > 50 )
+        // console.log(finalscores);
+        
+
+        //Reduce Method
+
+        const customPrices = [1,2,3,4,5,6,7,8,9,10]
+        // const finalprices = customPrices.reduce(function (accumulator, currentvalue) {
+        //     console.log(`accumulator is ${accumulator} and currentvalue is ${currentvalue}`);
+            
+        //     return accumulator + currentvalue
+        // },0)
+        // console.log(finalprices);
+
+        // const finalprices = customPrices.reduce ( (accumulator, currentvalue) => accumulator + currentvalue ,0)
+        // console.log(finalprices);
+        
+        const shoppingCart = [
+            {
+                itemName: "javascript Course",
+                price: 999
+            },
+            {
+                itemName: "Python Course",
+                price: 1999
+            },
+            {
+                itemName: "Figma Course",
+                price: 1299
+            },
+        ]
+        const finalprice = shoppingCart.reduce( (accum, item)=>  accum + item.price , 0 )
+
+        console.log(finalprice);
+        
+     </script>
+      <!--Filter map and reduce-->
+
+     <!--Synchronous vs Asynchronous-->
+      <script>
+        //Synchronous vs Asynchronous
+
+        //Synchronous (Normal JS)
+        console.log("Start")
+        console.log("Middle")
+        console.log("End")
+
+        //Asynchronous
+        console.log("start");
+        setTimeout(()=> {
+            console.log("Middle")
+        }, 1000)
+        console.log("End")    
+      </script>
+     <!--Synchronous vs Asynchronous-->
+
+     <!--Promise-->
+    <script>
+        //What is Promise?
+        //Promise = future result
+        const promise = new Promise((resolve,reject) => { //resolve(Term) = success and reject(Term) = error
+            let success = true;
+            if(success) {
+                resolve("Task Completed")
+            } else {
+                reject("Error")
+            }
+        });
+        promise
+        .then((res) => console.log(res))//then = success handler
+        .catch((err) => console.log(err))//err = error handler
+    </script>
+    <!--Promise-->
+
+    <!--fetch API-->
+    <script>
+        //fetch API
+        fetch("")
+        .then((res) => res.json()) //res is use to response the server
+        .then((data) => console.log(data)) // then show the data
+        .catch((err) => console.log(err)) // show the error
+    </script>
+    <!--fetch API-->
+
+    <!--async / await-->
+    <script>
+        //async / await
+        async function getUsers() { //async → function কে async বানায়
+            try {
+                const res = await fetch("await → wait until result"); //await → wait until result comes
+                const data = await res.json();
+                console.log(data);
+            } catch (err) {
+                console.log(err)
+            }
+        }
+        getUsers();
+
+        //Why async is IMPORTANT for React?
+        //React uses:
+        //1.API calls 2.form submit 3.Data loading
+        //Without async → React impossible
+    </script>
+    <!--async / await-->
+    
+    <!--DOM Basics-->
+    <script>
+        //DOM Basics
+        document.querySelector("button").addEventListener("click", () => {
+            console.log("Button clicked");
+        });
+        // input value
+        document.querySelector("input").addEventListener("input", (e) => {
+            console.log((e.target.value))
+        })
+    </script>
+    <!--DOM Basics-->
+
+    <!--Currying-->
+    <script>
+        //What is Currying? Currying = breaking a function with multiple arguments into multiple functions with one argument each
+        // In shotform Currying = One argument at a time
+        // Normal Function
+        function add (a , b) {
+            return a + b;
+        }
+        console.log(add(2.3)); // takes 2 arguments at once
+
+        // Curried Function
+        function count (b) {
+            return function (c) {
+                return b + c
+            }
+        }
+        console.log(count(3)(5)); // First function takes a and second function takes b
+
+        //Arrow Function Version (Modern)
+        const add = (a) => (b) => a + b;
+        console.log(add(2)(3)); // 5      
+        
+        //Why Currying? only for Reusability. One function → multiple uses
+        const multiply = (a) => (b) => a * b;
+
+        const double = multiply(2);
+        const triple = multiply(3);
+
+        console.log(double(5)); // 10
+        console.log(triple(5)); // 15
+    </script>
+    <!--Currying-->
+
+    <!--Debouncing-->
+    <script>
+        //Debouncing = “Wait until user stops doing something, then run code once”
+        //Suppose You type-
+        //S → Su → Sub → Subr → Subra → Subrata
+        //API Called 6 times
+        // But with debouncing Only ONE API call (after user stops typing)
+
+        //User keeps typing → timer resets
+        //User stops → timer finishes → function runs
+        //Visual Flow-
+        //Typing...
+        // ↓
+        // clear previous timer
+        // ↓
+        // start new timer
+        // ↓
+        // (wait...)
+        // ↓
+        // execute function
+
+        function debounce(func, delay) {
+            let timeout;//Stores timer ID
+
+            return function (...args) {
+
+                // Step 1: cancel previous timer
+                clearTimeout(timeout);//Cancels previous call
+
+                // Step 2: start new timer
+                timeout = setTimeout(() => {//Starts new timer
+                func(...args);
+                }, delay);
+            };
+        }
+        // Shorter version
+        const debounce = (func, delay) => {
+            let timeout;
+
+            return (...args) => {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func(...args), delay);
+            };
+        };
+        //Debounce works because of closure
+    </script>
+
+</body>
+</html>

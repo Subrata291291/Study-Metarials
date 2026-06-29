@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- fetch("https://api.example.com/data")
+  .then(response => response.json())   // Convert response to JSON
+  .then(data => console.log(data))      // Handle the data
+  .catch(error => console.error("Error:", error)); // Handle errors -->
+
+
+<!-- ✅ Explanation:
+
+fetch(url) → sends the request.
+
+response.json() → converts the response into a usable JavaScript object.
+
+.then() → handles successful results.
+
+.catch() → catches network or response errors. -->
+
+<!-- 🚀 Example 1: GET Request
+fetch("https://jsonplaceholder.typicode.com/posts/1")
+  .then(res => res.json())
+  .then(data => console.log(data))
+  .catch(err => console.error(err));
+
+🧾 Output:
+
+{
+  "userId": 1,
+  "id": 1,
+  "title": "Sample title",
+  "body": "Some post content..."
+} -->
+
+
+<!-- 📮 Example 2: POST Request (send data to a server)
+fetch("https://jsonplaceholder.typicode.com/posts", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    title: "My Post",
+    body: "This is my post content",
+    userId: 1
+  })
+})
+  .then(res => res.json())
+  .then(data => console.log("Saved:", data))
+  .catch(err => console.error("Error:", err)); -->
+
+</body>
+</html>

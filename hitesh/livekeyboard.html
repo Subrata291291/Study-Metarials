@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Virtual Keyboard</title>
+<style>
+  body {
+    background: linear-gradient(135deg, #1f1c2c, #928dab);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    margin: 0;
+  }
+
+  h1 {
+    margin-bottom: 20px;
+  }
+
+  .keyboard {
+    display: grid;
+    grid-template-columns: repeat(15, 60px);
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .key {
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    text-align: center;
+    line-height: 60px;
+    height: 60px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    user-select: none;
+  }
+
+  .key.active {
+    background: #00ffb3;
+    color: #111;
+    transform: scale(1.1);
+    box-shadow: 0 0 15px #00ffb3;
+  }
+
+  .key.wide { grid-column: span 2; }
+  .key.space { grid-column: span 6; }
+
+  .info {
+    font-size: 1.2rem;
+  }
+</style>
+</head>
+<body>
+<h1>Virtual Keyboard</h1>
+
+<div class="keyboard" id="keyboard"></div>
+<div class="info" id="info">Press any key...</div>
+
+<script>
+  const keysLayout = [
+    ['`','1','2','3','4','5','6','7','8','9','0','-','=','Backspace'],
+    ['Tab','Q','W','E','R','T','Y','U','I','O','P','[',']','\\'],
+    ['CapsLock','A','S','D','F','G','H','J','K','L',';','\'','Enter'],
+    ['Shift','Z','X','C','V','B','N','M',',','.','/','Shift'],
+    ['Ctrl','Win','Alt','Space','Alt','Win','Menu','Ctrl']
+  ];
+
+  const specialKeyMap = {
+    " "        : "space",
+    "Control"  : "ctrl",
+    "Alt"      : "alt",
+    "Shift"    : "shift",
+    "Meta"     : "win",
+    "CapsLock" : "capslock",
+    "Tab"      : "tab",
+    "Enter"    : "enter",
+    "Backspace": "backspace",
+    "Escape"   : "esc",
+    "Menu"     : "menu"
+  };
+
+  const keyboard = document.getElementById('keyboard');
+  const info = document.getElementById('info');
+
+  // Create keys dynamically
+  keysLayout.forEach(row => {
+    row.forEach(key => {
+      const keyElement = document.createElement('div');
+      keyElement.classList.add('key');
+
+      // Assign special classes
+      if(['Backspace','Tab','CapsLock','Enter','Shift','Ctrl','Alt','Win','Menu'].includes(key)) {
+        keyElement.classList.add('wide');
+      }
+      if(key === 'Space') keyElement.classList.add('space');
+
+      keyElement.textContent = key;
+
+      // data-key in lowercase for letters, special mapping for keys
+      const dataKey = specialKeyMap[key] || key.toLowerCase();
+      keyElement.setAttribute('data-key', dataKey);
+
+      keyboard.appendChild(keyElement);
+    });
+  });
+
+  // Function to map event key to data-key
+  function mapKey(e) {
+    if(specialKeyMap[e.key] !== undefined) return specialKeyMap[e.key];
+    return e.key.length === 1 ? e.key.toLowerCase() : e.key.toLowerCase();
+  }
+
+  // Handle key press
+  window.addEventListener('keydown', (e) => {
+    const key = mapKey(e);
+    const pressedKey = document.querySelector(`.key[data-key="${key}"]`);
+    if(pressedKey) pressedKey.classList.add('active');
+    info.textContent = `Pressed: ${e.key} | Code: ${e.code}`;
+  });
+
+  // Handle key release
+  window.addEventListener('keyup', (e) => {
+    const key = mapKey(e);
+    const releasedKey = document.querySelector(`.key[data-key="${key}"]`);
+    if(releasedKey) releasedKey.classList.remove('active');
+  });
+</script>
+</body>
+</html>

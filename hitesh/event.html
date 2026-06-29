@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="images-box">
+        <ul id="myImages" style="display: flex;">
+            <li>
+                <img src="https://img.freepik.com/free-photo/beautiful-tropical-beach-sea-ocean-with-white-cloud-blue-sky-copyspace_74190-8663.jpg?t=st=1760365513~exp=1760369113~hmac=80145e69718b5648b1f92bd8eaf096458a969aa8d70c3e1760ac79da37e1f6d8&w=1480" alt="" width="400px" height="400px" id="sea">
+            </li>
+            <li>
+                <img src="" alt="" width="" height="" id="owl">
+            </li>
+            <li>
+                <img src="https://img.freepik.com/free-photo/photorealistic-view-tree-nature-with-branches-trunk_23-2151478040.jpg?t=st=1760362932~exp=1760366532~hmac=000749172dc81503b4c22a53f2e650a70e4a01270d83e700167380fb7a1a6b31&w=1480" alt="" width="400px" height="400px" id="nature">
+            </li>
+            <li>
+                <img src="" alt="" width="" height="" id="flower">
+            </li>
+            <li>
+                <img src="" alt="" width="" height="" id="photohop">
+            </li>
+            <li>
+                <a href="https://www.freepik.com/free-photo/beautiful-tropical-beach-sea-ocean-with-white-cloud-blue-sky-copyspace_5017216.htm#fromView=search&page=1&position=2&uuid=5c028878-d0a4-482f-b957-76408f17d0d1&query=sea" id="google">google</a>
+            </li>
+        </ul>
+    </div>
+    <script>
+        // document.getElementById("nature").onclick = function(){
+        //     alert('nature clicked')
+        // }
+        document.getElementById("nature").addEventListener('click', function(e) {
+            //alert("Nature Clicked")
+            console.log(e);
+            
+        },false) // here false is default as eventBubbling
+        // We need to study about - type, timestamp, defaultPrevented, target, toElement, srcElement, currentTarget, clientX, clientY, screenX, screenY , altkey, ctrlkey, shiftkey, keyCode
+
+
+        //In this scenario of eventPropogation
+        document.getElementById("myImages").addEventListener('click', function(e) {
+            //alert("Nature Clicked")
+            console.log('clicked inide the ul');
+            
+        },false)
+
+        // document.getElementById("nature").addEventListener('click', function(e) {
+        //     //alert("Nature Clicked")
+        //     console.log('clicked nature');
+        //     e.stopPropagation()
+        // },false)
+
+        //preventdefault method to stop redirecting
+        document.getElementById("google").addEventListener('click', function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('google clicked');
+            
+        },false)
+
+        //remove on click
+        // document.getElementById("myImages").addEventListener('click', function(e) {
+        //     // console.log(e.target.parentNode);
+        //     let removeItem = e.target.parentNode
+        //     removeItem.remove()
+        //     //removeItem.parentNode.removeChild(removeItem)
+        // },false)
+
+        //remove on click using tagName
+        document.getElementById("myImages").addEventListener('click', function(e) {
+            console.log(e.target.tagName);
+            console.log(e.target.id);
+            if(e.target.tagName === 'IMG'){
+                let removeItem = e.target.parentNode
+                removeItem.remove()
+            }
+        })
+    </script>
+</body>
+</html>
