@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body class="light">
+    <!-- Demo 1 -->
+    <div id="demo">HelloWorld</div>
+
+    <!-- Demo 2 -->
+    <button onclick="document.getElementById('bulbPic').src='images/pic_bulbon.gif'">Turn on</button>
+    <img src="images/pic_bulboff.gif" alt="" id="bulbPic">
+    <button onclick="document.getElementById('bulbPic').src='images/pic_bulboff.gif'">Turn Off</button>
+
+    <!-- Demo 3 -->
+    <div id="demo1">size changed</div>
+    <button onclick="document.getElementById('demo1').style.fontSize='30px'">Click me</button>
+
+    <!-- Demo 4 -->
+    <div class="demo1">size changed</div>
+    <button onclick="document.querySelector('.demo1').style.fontSize='40px'">Click me</button>
+
+    <!-- Demo 5 -->
+     <div id="demo2">change the para</div>
+     <button onclick="myFunction()">Try It</button>
+
+    <!-- Demo 6 -->
+    <!-- <h1>JavaScript can "display" data in different ways:</h1>
+    Writing into an HTML element, using innerHTML or innerText.
+    Writing into the HTML output using document.write().
+    Writing into an alert box, using window.alert().
+    Writing into the browser console, using console.log(). -->
+    <div id="demo3"></div>
+    <button onclick="innerFunction()">Ty it</button>
+
+
+    <!-- Demo 7 Writing into an HTML element, using innerHTML or innerText.-->
+    <div id="demo4">Hello World</div>
+    <button onclick="innerTextFunction()">Ty it</button>
+
+    <!-- Demo 8 Writing into the HTML output using document.write().-->
+    <div id="demo5">Hello World</div>
+    <button onclick="document.write(5+9)">Ty it</button>
+
+    <!-- Demo 9 Writing into an alert box, using window.alert()-->
+    <div id="demo6">Hello World</div>
+    <button onclick="window.alert('Welcome to our site')">Ty it</button>
+
+    <!-- Demo 10 Writing into the browser console, using console.log()-->
+    <script>
+        console.log(8 + 5);
+    </script>
+
+    <!-- Demo 11-->
+    <button onclick="printFuction()">Click to print</button>
+
+
+    <!--Dem0 12-->
+    <h2>JavaScript Statements</h2>
+    <div id="demo12"></div>
+
+    <!--Dem0 13-->
+    <h2>JavaScript const</h2>
+    <div id="demo13"></div>
+
+
+    <!--Demo 14-->
+    <h1>JavaScript String Operators</h1>
+    <div id="demo14"></div>
+
+
+    <!--Demo 15-->
+
+    <!-- JavaScript has 8 Datatypes
+        String
+        Number
+        Bigint
+        Boolean
+        Undefined
+        Null
+        Symbol
+        Object 
+    
+    // Numbers:
+        let length = 16;
+        let weight = 7.5;
+
+    // Strings:
+        let color = "Yellow";
+        let lastName = "Johnson";
+
+    // Booleans
+        let x = true;
+        let y = false;
+
+    // Object:
+        const person = {firstName:"John", lastName:"Doe"};
+
+    // Array object:
+
+    // Date object:
+        const date = new Date("2022-03-25");
+    -->
+
+    <!--Demo 16-->
+    <!-- Theme Toggle Using Ternary Operator -->
+    <div class="demo-16">
+        <h1 id="title">Light Mode</h1>
+        <button id="toggleBtn">Toggle Theme</button>
+    </div>
+    <style>
+        .dark {
+            background-color: #121212;
+            color: white;
+        }
+        .light {
+            background-color: white;
+            color: black;
+        }
+    </style>
+    <!--Demo 16-->
+    
+
+
+
+
+    <script src="js/custom.js"></script>
+
+</body>
+</html>
