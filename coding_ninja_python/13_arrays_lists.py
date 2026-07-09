@@ -21,8 +21,8 @@ print(f"Array after popping the last element: {arr}")  # Output: array('i', [1, 
 arr.pop(1)  # Removing the element at index 1
 print(f"Array after popping the element at index 1: {arr}")  # Output: array('i', [1, 10, 4, 5])
 
-arr.sort()  # Sorting the array
-print(f"Array after sorting: {arr}")  # Output: array('i', [1, 4, 5, 10])
+# arr.sort()  # Sorting the array
+# print(f"Array after sorting: {arr}")  # Output: array('i', [1, 4, 5, 10])
 
 arr.reverse()  # Reversing the array
 print(f"Array after reversing: {arr}")  # Output: array('i', [10, 5, 4, 2, 1])
@@ -53,3 +53,7 @@ print(f"Array converted to bytes: {arr.tobytes()}")  # Output: b'\x05\x00\x00\x0
 
 arr.frombytes(b'\x0e\x00\x00\x00\x0f\x00\x00\x00')  # Adding elements from bytes to the array
 print(f"Array after adding elements from bytes: {arr}")  # Output: array('i', [5, 4, 10, 2, 1, 7, 8, 9, 11, 12, 13, 14, 15])
+
+
+arr = array.array('d', [1.1, 2.2, 3.3, 4.4, 5.5])  # Creating an array of doubles
+print(f"Array of doubles: {arr}")  # Output: array('d', [1.1, 2.2, 3.3, 4.4, 5.5])
