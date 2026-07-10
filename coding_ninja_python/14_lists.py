@@ -61,3 +61,31 @@
 
 # result = linearsearch(arr, n, x)
 # print(result)
+
+#Find the second largest element in an array
+def secondLargestElement(arr, n):
+
+    if n < 2:
+        return -1
+
+    largest = float('-inf')
+    second = float('-inf')
+
+    for num in arr:
+        if num > largest:
+            second = largest
+            largest = num
+        elif num != largest and num > second:
+            second = num
+
+    if second == float('-inf'):
+        return -1
+
+    return second
+
+
+n = int(input("Enter size: "))
+
+arr = list(map(int, input("Enter elements: ").split()))
+
+print(secondLargestElement(arr, n))
