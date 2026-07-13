@@ -34,3 +34,17 @@ print()  # Newline after printing password characters
 for i in range(0, len(username)):
     print(i, username[i])
 print()  # Newline after printing username characters with indices
+
+
+#function to count character frequency in a string
+def char_freq(s, ch):
+	index = 0
+	count = 0
+	while index < len(s):
+		if s[index] == ch:
+			count += 1
+		index += 1
+	return count
+
+char_freq("happy holi", "h")
+print("Character frequency of 'h' in 'happy holi':", char_freq("happy holi", "h"))
